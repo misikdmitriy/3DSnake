@@ -4,7 +4,7 @@
   "description": "3D snake game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "lite": "lite-server --port 10001",
     "start": "npm run lite"
   },
@@ -23,8 +23,10 @@
   "homepage": "https://github.com/misikdmitriy/3DSnake#readme",
   "devDependencies": {
     "bootstrap": "^3.3.7",
+    "chai": "^4.1.2",
     "jquery": "^3.2.1",
     "lite-server": "^2.3.0",
+    "mocha": "^3.5.1",
     "three": "^0.87.1"
   }
 }
