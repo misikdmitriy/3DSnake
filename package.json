@@ -1,0 +1,29 @@
+{
+  "name": "3dsnake",
+  "version": "1.0.0",
+  "description": "3D snake game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lite": "lite-server --port 10001",
+    "start": "npm run lite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misikdmitriy/3DSnake.git"
+  },
+  "keywords": [
+    "3DSnake"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/misikdmitriy/3DSnake/issues"
+  },
+  "homepage": "https://github.com/misikdmitriy/3DSnake#readme",
+  "devDependencies": {
+    "jquery": "^3.2.1",
+    "lite-server": "^2.3.0",
+    "three": "^0.87.1"
+  }
+}
