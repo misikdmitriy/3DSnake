@@ -55,7 +55,7 @@ class MovingObject {
     }
 }
 
-class MovingObjectComposit extends MovingObject {
+class MovingObjectComposit {
     constructor(objs, position, growDirection) {
         Helpers.throwIfStrictEqual(growDirection, Direction.NODIRECTION);
 
@@ -72,11 +72,11 @@ class MovingObjectComposit extends MovingObject {
     }
 
     get position() {
-        return this._movingObjs[0].position;
+        return this._movingObjs.length > 0 ? this._movingObjs[0].position : null;
     }
 
     get object() {
-        return this._objs[0];
+        return this._objs.length > 0 ? this._objs[0] : null;
     }
 
     get objects() {
@@ -84,21 +84,17 @@ class MovingObjectComposit extends MovingObject {
     }
 
     move(direction) {
-        let nextPosition = {
-            x: this._movingObjs[0].position.x,
-            y: this._movingObjs[0].position.y
-        };
+        let nextPosition = this.position;
 
-        this._movingObjs[0].move(direction);
+        if (this._movingObjs.length > 0) {
+            this._movingObjs[0].move(direction);
+        }
 
         for (let i = 1; i < this._movingObjs.length; i++) {
             let savedPosition = this._movingObjs[i].position;
             this._movingObjs[i]._pos = nextPosition;
 
-            nextPosition = {
-                x: savedPosition.x,
-                y: savedPosition.y
-            };
+            nextPosition = savedPosition;
         }
     }
 }

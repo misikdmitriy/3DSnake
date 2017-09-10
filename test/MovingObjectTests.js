@@ -79,6 +79,60 @@ describe("Moving object tests", function () {
         assert(obj.position.x === pos.x + 1);
         assert(obj.position.y === pos.y);
     });
+});
 
-    // TODO: finish tests
+describe("Moving objects composit tests", function () {
+    it("constructor shpuld not fail", function () {
+        let composit = new MovingObjectComposit([{}], { x: 5, y: 6 }, Direction.UP);
+    });
+
+    it("constructor should fail", function () {
+        let act = function () { new MovingObjectComposit([], { x: 5, y: 6 }, Direction.NODIRECTION); };
+        chai.expect(act).to.throw();
+    });
+
+    it("position should return it", function () {
+        let pos = { x: 5, y: 6 };
+        let composit = new MovingObjectComposit([{}], pos, Direction.UP);
+        assert(composit.position.x == pos.x);
+        assert(composit.position.y == pos.y);
+    });
+
+    it("object should return first object", function () {
+        let objs = [{}];
+        let composit = new MovingObjectComposit(objs, { x: 5, y: 6 }, Direction.UP);
+
+        assert(composit.object === objs[0]);
+    });
+
+    it("object should return null", function () {
+        let objs = [];
+        let composit = new MovingObjectComposit(objs, { x: 5, y: 6 }, Direction.UP);
+
+        assert(composit.object === null);
+    });
+
+    it("objects should return array", function () {
+        let objs = [{}, {}, {}];
+        let composit = new MovingObjectComposit(objs, { x: 5, y: 6 }, Direction.UP);
+
+        assert(composit.objects.length === objs.length);
+    });
+
+    it("move should replace main", function () {
+        let objs = [{}, {}];
+        let pos = { x: 4, y: 0 };
+        let composit = new MovingObjectComposit(objs, pos, Direction.LEFT);
+        composit.move(Direction.UP);
+
+        assert(composit.position.x === pos.x);
+        assert(composit.position.y === pos.y - 1);
+    });
+
+    it("move should do nothing", function () {
+        let objs = [];
+        let pos = { x: 4, y: 0 };
+        let composit = new MovingObjectComposit(objs, pos, Direction.LEFT);
+        composit.move(Direction.UP);
+    });
 });
