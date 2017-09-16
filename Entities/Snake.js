@@ -98,6 +98,10 @@ class Snake {
         return array;
     }
 
+    get canColise() {
+        return false;
+    }
+
     incrementSnake(direction) {
         this._size++;
         this._addPart(direction);

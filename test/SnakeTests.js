@@ -73,5 +73,10 @@ describe("Snake tests", function () {
         for (let i = 0; i < 5; i++) {
             assert(parts[i] instanceof SnakeHead || parts[i] instanceof SnakeBody);
         }
-    })
+    });
+
+    it("canColise should return false", function() {
+        let snake = new Snake(5);
+        assert(snake.canColise === false);        
+    });
 });

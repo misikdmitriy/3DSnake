@@ -5,7 +5,7 @@ var fs = require("fs");
 var vm = require("vm");
 var chai = require("chai");
 
-var pathes = ["./Helpers/Helpers.js", "./Entities/Direction.js", "./Entities/MovingObject.js"];
+var pathes = ["./Helpers/Helpers.js", "./Entities/Direction.js"];
 
 pathes.forEach(function (path) {
     var code = fs.readFileSync(path);
@@ -79,6 +79,27 @@ describe("Moving object tests", function () {
         assert(obj.position.x === pos.x + 1);
         assert(obj.position.y === pos.y);
     });
+
+    it("canColise should return true", function() {
+        let pos = { x: 1, y: 2 };
+        let obj = new MovingObject({canColise: true}, pos);
+
+        assert(obj.canColise === true);
+    });
+
+    it("canColise should return false", function() {
+        let pos = { x: 1, y: 2 };
+        let obj = new MovingObject({canColise: false}, pos);
+
+        assert(obj.canColise === false);
+    });
+
+    it("parts should return array with this", function() {
+        let pos = {x:3,y:4};
+        let obj = new MovingObject(null, pos);
+
+        assert(obj.parts[0] === obj);
+    });
 });
 
 describe("Moving objects composit tests", function () {
@@ -134,5 +155,21 @@ describe("Moving objects composit tests", function () {
         let pos = { x: 4, y: 0 };
         let composit = new MovingObjectComposit(objs, pos, Direction.LEFT);
         composit.move(Direction.UP);
+    });
+
+    it("canColise should return true", function() {
+        let objs = [{canColise: true}, {canColise: true}];
+        let pos = { x: 1, y: 2 };
+        let obj = new MovingObjectComposit(objs, pos, Direction.LEFT);
+
+        assert(obj.canColise === true);
+    });
+
+    it("canColise should return false", function() {
+        let objs = [{canColise: true}, {canColise: false}];
+        let pos = { x: 1, y: 2 };
+        let obj = new MovingObjectComposit(objs, pos, Direction.LEFT);
+
+        assert(obj.canColise === false);
     });
 });

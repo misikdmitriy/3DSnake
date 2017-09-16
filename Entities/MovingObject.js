@@ -50,6 +50,18 @@ class MovingObject {
         return this._obj;
     }
 
+    get objects() {
+        return [this._obj];
+    }
+
+    get parts() {
+        return [this];
+    }
+
+    get canColise() {
+        return this._obj.canColise;
+    }
+
     move(direction) {
         this._pos = nextPosition(direction, this.position);
     }
@@ -65,8 +77,8 @@ class MovingObjectComposit {
         let last = null;
 
         for (let i = 0; i < objs.length; i++) {
-            this._movingObjs.push(new MovingObject(objs[i], 
-                    last !== null ? nextPosition(growDirection, last.position) : position));
+            this._movingObjs.push(new MovingObject(objs[i],
+                last !== null ? nextPosition(growDirection, last.position) : position));
             last = this._movingObjs[this._movingObjs.length - 1];
         }
     }
@@ -83,6 +95,10 @@ class MovingObjectComposit {
         return this._objs;
     }
 
+    get parts() {
+        return this._movingObjs;
+    }
+
     move(direction) {
         let nextPosition = this.position;
 
@@ -96,5 +112,11 @@ class MovingObjectComposit {
 
             nextPosition = savedPosition;
         }
+    }
+
+    get canColise() {
+        return this._objs.reduce(function (prev, curr) {
+            return prev && curr.canColise; 
+        }, true);
     }
 }

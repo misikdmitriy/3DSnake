@@ -13,7 +13,13 @@ var Helpers = {
 
     throwIfLess: function(num, comparer) {
         if (num < comparer) {
-            throw new Error(num + " is less than " + comparer)
+            throw new Error(num + " is less than " + comparer);
+        }
+    },
+
+    throwIfGreater: function(num, comparer) {
+        if (num > comparer) {
+            throw new Error(num + " is greater than " + comparer);
         }
     },
 
