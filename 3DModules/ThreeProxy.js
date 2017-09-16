@@ -12,6 +12,8 @@ class ThreeProxy {
         this.renderer.setSize(this.width, this.height);
         document.body.appendChild(this.renderer.domElement);
 
+
+
         this.animate();
     }
 
@@ -20,6 +22,11 @@ class ThreeProxy {
 
         let innerAnimate = function () {
             requestAnimationFrame(innerAnimate);
+            
+            if (self.trackballControls) {
+                var delta = self.clock.getDelta();
+                self.trackballControls.update(delta);
+            }
 
             self.renderer.render(self.scene, self.camera);
         };
@@ -29,6 +36,21 @@ class ThreeProxy {
 
     addMesh(mesh) {
         this.scene.add(mesh);
+    }
+
+    addTrackball() {
+        this.trackballControls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        this.clock = new THREE.Clock();
+
+        this.trackballControls.target.set(0, 0, 0);
+        this.trackballControls.rotateSpeed = 1.0;
+        this.trackballControls.zoomSpeed = 1.0;
+        this.trackballControls.panSpeed = 1.0;
+        this.trackballControls.staticMoving = true;
+    }
+
+    addLight(light) {
+        this.scene.add(light);
     }
 
     setCameraPosition(x, y, z) {

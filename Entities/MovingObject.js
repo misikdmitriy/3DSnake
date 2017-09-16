@@ -1,33 +1,14 @@
 // jshint esversion: 6
 
+class CollisionException extends Error { }
+
 class MovingObject {
     static isColise(part1, part2) {
         return part1.position.x === part2.position.x &&
             part1.position.y === part2.position.y;
     }
 
-    static availableMoves(part1, part2) {
-        if (part1.position.x === part2.position.x) {
-            if (part1.position.y === part2.position.y + 1) {
-                return [Direction.RIGHT, Direction.DOWN, Direction.LEFT];
-            }
-            if (part1.position.y === part2.position.y - 1) {
-                return [Direction.UP, Direction.RIGHT, Direction.LEFT];
-            }
-        }
-        if (part1.position.y === part2.position.y) {
-            if (part1.position.x === part2.position.x + 1) {
-                return [Direction.UP, Direction.RIGHT, Direction.DOWN];
-            }
-            if (part1.position.x === part2.position.x - 1) {
-                return [Direction.UP, Direction.DOWN, Direction.LEFT];
-            }
-        }
-
-        return [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT];
-    }
-
-    constructor(obj, position) {
+    constructor(obj, position, canColise) {
         Helpers.throwIfNotInteger(position.x);
         Helpers.throwIfNotInteger(position.y);
 
@@ -37,6 +18,7 @@ class MovingObject {
         };
 
         this._obj = obj;
+        this._canColise = canColise || false;
     }
 
     get position() {
@@ -59,7 +41,15 @@ class MovingObject {
     }
 
     get canColise() {
-        return this._obj.canColise;
+        return this._canColise === true;
+    }
+
+    get isColise() {
+        return false;
+    }
+
+    get availableMoves() {
+        return [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT];
     }
 
     move(direction) {
@@ -68,8 +58,21 @@ class MovingObject {
 }
 
 class MovingObjectComposit {
-    constructor(objs, position, growDirection) {
+    static isColise(part1, part2) {
+        for (let i = 0; i < part1.parts.length; i++) {
+            for (let j = 0; j < part2.parts.length; j++) {
+                if (MovingObject.isColise(part1.parts[i], part2.parts[j])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    constructor(objs, position, canColise, growDirection) {
         Helpers.throwIfStrictEqual(growDirection, Direction.NODIRECTION);
+        Helpers.throwIfLess(objs.length, 1);
 
         this._objs = objs;
 
@@ -78,17 +81,18 @@ class MovingObjectComposit {
 
         for (let i = 0; i < objs.length; i++) {
             this._movingObjs.push(new MovingObject(objs[i],
-                last !== null ? nextPosition(growDirection, last.position) : position));
+                last !== null ? nextPosition(growDirection, last.position) : position,
+                canColise));
             last = this._movingObjs[this._movingObjs.length - 1];
         }
     }
 
     get position() {
-        return this._movingObjs.length > 0 ? this._movingObjs[0].position : null;
+        return this._movingObjs[0].position;
     }
 
     get object() {
-        return this._objs.length > 0 ? this._objs[0] : null;
+        return this._objs[0];
     }
 
     get objects() {
@@ -99,12 +103,34 @@ class MovingObjectComposit {
         return this._movingObjs;
     }
 
+    get availableMoves() {
+        let head = this._movingObjs[0];
+        let next = this._movingObjs[1];
+
+        if (head.position.x === next.position.x) {
+            if (head.position.y === next.position.y + 1) {
+                return [Direction.RIGHT, Direction.DOWN, Direction.LEFT];
+            }
+            if (head.position.y === next.position.y - 1) {
+                return [Direction.UP, Direction.RIGHT, Direction.LEFT];
+            }
+        }
+        if (head.position.y === next.position.y) {
+            if (head.position.x === next.position.x + 1) {
+                return [Direction.UP, Direction.RIGHT, Direction.DOWN];
+            }
+            if (head.position.x === next.position.x - 1) {
+                return [Direction.UP, Direction.DOWN, Direction.LEFT];
+            }
+        }
+
+        return [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT];
+    }
+
     move(direction) {
         let nextPosition = this.position;
 
-        if (this._movingObjs.length > 0) {
-            this._movingObjs[0].move(direction);
-        }
+        this._movingObjs[0].move(direction);
 
         for (let i = 1; i < this._movingObjs.length; i++) {
             let savedPosition = this._movingObjs[i].position;
@@ -112,11 +138,31 @@ class MovingObjectComposit {
 
             nextPosition = savedPosition;
         }
+
+        if (!this.canColise && this.isColise) {
+            throw new CollisionException();
+        }
+    }
+
+    get isColise() {
+        for (let i = 0; i < this.parts.length - 1; i++) {
+            for (let j = i + 1; j < this.parts.length; j++) {
+                if (MovingObject.isColise(this.parts[i], this.parts[j])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     get canColise() {
-        return this._objs.reduce(function (prev, curr) {
-            return prev && curr.canColise; 
-        }, true);
+        return this._movingObjs[0].canColise;
+    }
+}
+
+class PartsMovingObject extends MovingObjectComposit {
+    constructor(partsComposit, pos, canColise, growDirection) {
+        super(partsComposit.parts, pos, canColise, growDirection);
     }
 }

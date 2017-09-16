@@ -13,7 +13,12 @@ class GameMap {
         this._map = [];
 
         for (let i = 0; i < this._height; i++) {
-            this._map.push(new Array(this._width).fill(null));
+            var pushable = [];
+            for (let j = 0; j < this._width; j++) {
+                pushable.push([]);
+            }
+
+            this._map.push(pushable);
         }
     }
 
@@ -27,15 +32,15 @@ class GameMap {
 
     get objects() {
         let result = [];
+        let addPromise = obj => {
+            if (result.indexOf(obj) === -1) {
+                result.push(obj);
+            }
+        };
+
         for (let i = 0; i < this._height; i++) {
             for (let j = 0; j < this._width; j++) {
-                if (this._map[i][j] !== null) {
-                    let obj = this._map[i][j];
-
-                    if (result.indexOf(obj) !== -1) {
-                        result.push(obj);
-                    }
-                }
+                this._map[i][j].forEach(addPromise);
             }
         }
 
@@ -45,29 +50,38 @@ class GameMap {
     addObject(object) {
         let self = this;
 
-        object.parts.forEach(function (obj) {
-            var pos = obj.position;
+        object.parts.forEach(obj => {
+            let pos = obj.position;
 
             Helpers.throwIfGreater(pos.x, self.width);
             Helpers.throwIfGreater(pos.y, self.height);
+            Helpers.throwIfLess(pos.x, 0);
+            Helpers.throwIfLess(pos.y, 0);
 
             let currentObj = self._map[pos.y][pos.x];
-            
-            if (currentObj === null || (currentObj.canColise && obj.canColise)) {
-                self._map[pos.y][pos.x] = object;
-            } else {
-                throw new MapCollisionException();
+            let canBePushed = currentObj.reduce((prev, curr) => {
+                return prev && curr.canColise;
+            }, true);
+
+            if (currentObj.length === 0 || (canBePushed && obj.canColise)) {
+                self._map[pos.y][pos.x].push(object);
+            }
+            else {
+                throw new MapCollisionException("collision detected");
             }
         });
     }
 
     removeObject(object) {
         let result = false;
+
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
-                if (this._map[i][j] === object) {
+                let index = this._map[i][j].indexOf(object);
+
+                if (index !== -1) {
                     result = true;
-                    this._map[i][j] = null;
+                    this._map[i][j].splice(index, 1);
                 }
             }
         }
@@ -78,13 +92,17 @@ class GameMap {
     replaceObject(object) {
         if (this.removeObject(object)) {
             this.addObject(object);
-            return true;            
+            return true;
         }
 
         return false;
     }
 
+    objectsOn(x, y) {
+        return this._map[y][x];
+    }
+
     isEmpty(x, y) {
-        return this._map[y][x] === null;
+        return this._map[y][x].length === 0;
     }
 }

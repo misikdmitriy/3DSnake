@@ -1,4 +1,6 @@
-var Direction = {
+// jshint esversion: 6
+
+let Direction = {
     UP: 1,
     RIGHT: 2,
     DOWN: 4,

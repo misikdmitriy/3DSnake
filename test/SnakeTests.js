@@ -1,16 +1,7 @@
 // jshint esversion: 6
 
-var assert = require("assert");
-var fs = require("fs");
-var vm = require("vm");
-var chai = require("chai");
-
-var pathes = ["./Helpers/Helpers.js", "./Entities/Direction.js", "./Entities/Snake.js"];
-
-pathes.forEach(function (path) {
-    var code = fs.readFileSync(path);
-    vm.runInThisContext(code);
-});
+let assert = require("assert");
+let chai = require("chai");
 
 describe("Snake tests", function () {
     it("constructor should not fail", function () {
@@ -75,8 +66,21 @@ describe("Snake tests", function () {
         }
     });
 
-    it("canColise should return false", function() {
+    it("accept should grow snake", function() {
         let snake = new Snake(5);
-        assert(snake.canColise === false);        
+        let food = new GoodFood();
+
+        snake.accept(food);
+
+        assert(snake.size === 6);
+    });
+
+    it("accept should throw exception", function() {
+        let snake = new Snake(3);
+        let food = new PoisonFood();
+
+        let act = function() {snake.accept(food);};
+
+        chai.expect(act).to.throw();
     });
 });

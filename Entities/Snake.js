@@ -1,6 +1,7 @@
 // jshint esversion: 6
 
 class IncorrectSnakePartException extends Error { }
+class SnakeDeadException extends Error { }
 
 class SnakePart {
     constructor() {
@@ -98,18 +99,19 @@ class Snake {
         return array;
     }
 
-    get canColise() {
-        return false;
+    accept(food) {
+        if (food instanceof GoodFood) {
+            this._size++;
+            return this._addPart();
+        } 
+        if (food instanceof PoisonFood) {
+            throw new SnakeDeadException();
+        }
     }
 
-    incrementSnake(direction) {
-        this._size++;
-        this._addPart(direction);
-    }
-
-    _addPart(direction) {
+    _addPart() {
         this.last.nextPart = new SnakeBody();
     }
 }
 
-var EmptySnake = new Snake(2);
+let EmptySnake = new Snake(2);

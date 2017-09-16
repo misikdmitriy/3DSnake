@@ -1,16 +1,7 @@
 // jshint esversion: 6
 
-var assert = require("assert");
-var fs = require("fs");
-var vm = require("vm");
-var chai = require("chai");
-
-var pathes = ["./Helpers/Helpers.js", "./Entities/MovingObject.js", "./Entities/GameMap.js"];
-
-pathes.forEach(function (path) {
-    var code = fs.readFileSync(path);
-    vm.runInThisContext(code);
-});
+let assert = require("assert");
+let chai = require("chai");
 
 describe("GameMap tests", function () {
     it("constructor should create instance 1", function () {
@@ -54,8 +45,8 @@ describe("GameMap tests", function () {
 
     it("addObject should add if collision allowed", function () {
         let pos = { x: 5, y: 5 };
-        let obj1 = new MovingObject({ canColise: true }, pos);
-        let obj2 = new MovingObject({ canColise: true }, pos);
+        let obj1 = new MovingObject(null, pos, true);
+        let obj2 = new MovingObject(null, pos, true);
         let map = new GameMap(15, 15);
 
         map.addObject(obj1);
@@ -64,8 +55,8 @@ describe("GameMap tests", function () {
 
     it("addObject should add if collision allowed 2", function () {
         let pos = { x: 5, y: 5 };
-        let obj1 = new MovingObject({ canColise: true }, pos);
-        let obj2 = new MovingObjectComposit([{ canColise: true }], pos, Direction.LEFT);
+        let obj1 = new MovingObject(null, pos, true);
+        let obj2 = new MovingObjectComposit([{}], pos, true, Direction.LEFT);
         let map = new GameMap(15, 15);
 
         map.addObject(obj1);
@@ -74,7 +65,7 @@ describe("GameMap tests", function () {
 
     it("addObject should throw error 1", function () {
         let pos = { x: 5, y: 20 };
-        let obj1 = new MovingObject({ canColise: true }, pos);
+        let obj1 = new MovingObject(null, pos, true);
         let map = new GameMap(25, 15);
 
         let act = function () { map.addObject(obj1); };
@@ -83,7 +74,7 @@ describe("GameMap tests", function () {
 
     it("addObject should throw error 2", function () {
         let pos = { x: 5, y: 2 };
-        let obj1 = new MovingObject({ canColise: true }, pos);
+        let obj1 = new MovingObject(null, pos, true);
         let map = new GameMap(3, 25);
 
         let act = function () { map.addObject(obj1); };
@@ -92,8 +83,8 @@ describe("GameMap tests", function () {
 
     it("addObject should throw error 3", function () {
         let pos = { x: 5, y: 2 };
-        let obj1 = new MovingObject({ canColise: true }, pos);
-        let obj2 = new MovingObject({ canColise: false }, pos);
+        let obj1 = new MovingObject(null, pos, true);
+        let obj2 = new MovingObject(null, pos, false);
         let map = new GameMap(13, 25);
 
         let act = function () { map.addObject(obj1); map.addObject(obj2); };
@@ -102,8 +93,8 @@ describe("GameMap tests", function () {
 
     it("addObject should throw error 4", function () {
         let pos = { x: 5, y: 2 };
-        let obj1 = new MovingObject({ canColise: false }, pos);
-        let obj2 = new MovingObject({ canColise: true }, pos);
+        let obj1 = new MovingObject(null, pos, false);
+        let obj2 = new MovingObject(null, pos, true);
         let map = new GameMap(13, 25);
 
         let act = function () { map.addObject(obj1); map.addObject(obj2); };
@@ -113,10 +104,9 @@ describe("GameMap tests", function () {
     it("addObject should throw error 5", function () {
         let pos1 = { x: 3, y: 2 };
         let pos2 = { x: 1, y: 2 };
-        let obj = { canColist: false };
 
-        let obj1 = new MovingObject(obj, pos1);
-        let obj2 = new MovingObjectComposit([obj, obj, obj, obj, obj], pos2, Direction.RIGHT);
+        let obj1 = new MovingObject(null, pos1, false);
+        let obj2 = new MovingObjectComposit([{}, {}, {}, {}, {}], pos2, false, Direction.RIGHT);
         let map = new GameMap(13, 25);
 
         let act = function () { map.addObject(obj1); map.addObject(obj2); };
@@ -126,10 +116,9 @@ describe("GameMap tests", function () {
     it("addObject should throw error 6", function () {
         let pos1 = { x: 3, y: 1 };
         let pos2 = { x: 1, y: 2 };
-        let obj = { canColist: false };
 
-        let obj1 = new MovingObjectComposit([obj, obj, obj], pos1, Direction.DOWN);
-        let obj2 = new MovingObjectComposit([obj, obj, obj, obj, obj], pos2, Direction.RIGHT);
+        let obj1 = new MovingObjectComposit([{}, {}, {}], pos1, false, Direction.DOWN);
+        let obj2 = new MovingObjectComposit([{}, {}, {}, {} ,{}], pos2, false, Direction.RIGHT);
         let map = new GameMap(13, 25);
 
         let act = function () { map.addObject(obj1); map.addObject(obj2); };
@@ -169,11 +158,10 @@ describe("GameMap tests", function () {
     it("replace should throw error", function () {
         let pos1 = { x: 3, y: 1 };
         let pos2 = { x: 4, y: 2 };
-        let obj = { canColist: false };
 
-        let obj1 = new MovingObjectComposit([obj, obj, obj], pos1, Direction.DOWN);
-        let obj2 = new MovingObjectComposit([obj, obj, obj, obj, obj], pos2, Direction.RIGHT);
-        let map = new GameMap(13, 25);
+        let obj1 = new MovingObjectComposit([{}, {}, {}], pos1, false, Direction.DOWN);
+        let obj2 = new MovingObjectComposit([{}, {}, {}, {}, {}], pos2, false, Direction.RIGHT);
+        let map = new GameMap(15, 15);
 
         map.addObject(obj1);
         map.addObject(obj2);
@@ -182,5 +170,81 @@ describe("GameMap tests", function () {
         let act = function () { map.replaceObject(obj2); };
 
         chai.expect(act).to.throw();
+    });
+
+    it("objects should return all map objects 1", function() {
+        let pos1 = { x: 3, y: 1 };
+        let pos2 = { x: 4, y: 2 };
+
+        let obj1 = new MovingObjectComposit([{}, {}, {}], pos1, true, Direction.DOWN);
+        let obj2 = new MovingObjectComposit([{}, {}, {}, {}, {}], pos2, true, Direction.RIGHT);
+        let map = new GameMap(13, 25);
+
+        map.addObject(obj1);
+        map.addObject(obj2);
+
+        let objs = map.objects;
+
+        assert(objs.length === 2);
+        assert(objs.indexOf(obj1) !== -1);
+        assert(objs.indexOf(obj2) !== -1);
+    });
+
+    it("objects should return all map objects 2", function() {
+        let pos = { x: 3, y: 1 };
+
+        let obj1 = new MovingObject(null, pos, true);
+        let obj2 = new MovingObject(null, pos, true);
+        let map = new GameMap(10, 10);
+
+        map.addObject(obj1);
+        map.addObject(obj2);
+
+        let objs = map.objects;
+
+        assert(objs.length === 2);
+        assert(objs.indexOf(obj1) !== -1);
+        assert(objs.indexOf(obj2) !== -1);
+    });
+
+    it("objectsOn should return array", function() {
+        let pos = { x: 3, y: 1 };
+
+        let obj1 = new MovingObject(null, pos, true);
+        let obj2 = new MovingObject(null, pos, true);
+        let map = new GameMap(10, 10);
+
+        map.addObject(obj1);
+        map.addObject(obj2);
+
+        let objs = map.objectsOn(pos.x, pos.y);
+
+        assert(objs.length === 2);
+        assert(objs.indexOf(obj1) !== -1);
+        assert(objs.indexOf(obj2) !== -1);
+    });
+
+    it("objectsOn should return empty array", function() {
+        let map = new GameMap(10, 10);
+
+        let objs = map.objectsOn(1, 1);
+
+        assert(objs.length === 0);
+    });
+
+    it("isEmpty should return true", function() {
+        let map = new GameMap(10, 10);
+
+        assert(map.isEmpty(1, 1) === true);
+    });
+
+    it("isEmpty should return true", function() {
+        let pos = { x: 3, y: 1 };
+        let obj1 = new MovingObject(null, pos);
+        let map = new GameMap(10, 10);
+
+        map.addObject(obj1);
+
+        assert(map.isEmpty(pos.x, pos.y) === false);
     });
 });    
