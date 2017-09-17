@@ -15,7 +15,6 @@ class PlayerListener {
 
         let self = this;
         this._listener = function (event) {
-            console.log(event.keyCode);
             if (event.defaultPrevented) {
                 return;
             }

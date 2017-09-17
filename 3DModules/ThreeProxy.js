@@ -12,8 +12,6 @@ class ThreeProxy {
         this.renderer.setSize(this.width, this.height);
         document.body.appendChild(this.renderer.domElement);
 
-
-
         this.animate();
     }
 
@@ -34,8 +32,8 @@ class ThreeProxy {
         innerAnimate();
     }
 
-    addMesh(mesh) {
-        this.scene.add(mesh);
+    add(obj) {
+        this.scene.add(obj);
     }
 
     addTrackball() {
@@ -47,15 +45,5 @@ class ThreeProxy {
         this.trackballControls.zoomSpeed = 1.0;
         this.trackballControls.panSpeed = 1.0;
         this.trackballControls.staticMoving = true;
-    }
-
-    addLight(light) {
-        this.scene.add(light);
-    }
-
-    setCameraPosition(x, y, z) {
-        this.camera.position.x = x;
-        this.camera.position.y = y;
-        this.camera.position.z = z;
     }
 }

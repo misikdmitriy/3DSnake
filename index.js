@@ -5,18 +5,23 @@
 
     let threeProxy = new ThreeProxy(600, 400);
 
-    let mapRenderer = new MapRenderer(new GameMap());
+    let gameMap = new GameMap(50, 50);
+    let mapRenderer = new MapRenderer(gameMap);
+    let snake = new Snake(5);
+    let movingSnake = new PartsMovingObject(snake, { x: 5, y: 5 }, false, Direction.LEFT);
+    let snakeRenderer = new SnakeRenderer(movingSnake);
+    let cameraRenderer = new CameraRenderer3D(movingSnake);
 
-    mapRenderer.render(threeProxy.scene);
+    mapRenderer.render(threeProxy);
+    snakeRenderer.render(threeProxy);
+    cameraRenderer.render(threeProxy);
 
-    threeProxy.setCameraPosition(0, 0, 50);
+    if (CONFIG.debug) {
+        threeProxy.addTrackball();
+    }
 
-    threeProxy.addTrackball();
-
-    threeProxy.addLight(ThreeHelper.createDirectionalLight(0xffffff, 0.5, 15, 0, 0));
-    threeProxy.addLight(ThreeHelper.createDirectionalLight(0xffffff, 0.5, -15, 0, 0));
-    threeProxy.addLight(ThreeHelper.createDirectionalLight(0xffffff, 0.5, 0, 15, 0));
-    threeProxy.addLight(ThreeHelper.createDirectionalLight(0xffffff, 0.5, 0, -15, 0));
-    threeProxy.addLight(ThreeHelper.createDirectionalLight(0xffffff, 0.5, 0, 0, 15));
-    threeProxy.addLight(ThreeHelper.createDirectionalLight(0xffffff, 0.5, 0, 0, -15));
+    let lightFactory = new LightFactory();
+    lightFactory.createLight(gameMap).forEach(light => {
+        threeProxy.add(light);
+    });
 })();
