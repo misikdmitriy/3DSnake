@@ -1,13 +1,13 @@
 // jshint esversion: 6
 
 let DefaultControls = {
-    UP: 0x57, // W
-    RIGHT: 0x44, // D
-    DOWN: 0x53, // S
-    LEFT: 0x41 // A
+    UP: 87, // W
+    RIGHT: 68, // D
+    DOWN: 83, // S
+    LEFT: 65 // A
 };
 
-class PlayerListener {
+class PlayerController {
     constructor(target, controls) {
         this._obj = null;
         this._target = target;
@@ -24,8 +24,8 @@ class PlayerListener {
             if (event.keyCode === controls.UP) {
                 newDirection = Direction.UP;
             }
-            else if (event.keyCode === controls.RIGTH) {
-                newDirection = Direction.RIGTH;
+            else if (event.keyCode === controls.RIGHT) {
+                newDirection = Direction.RIGHT;
             }
             else if (event.keyCode === controls.DOWN) {
                 newDirection = Direction.DOWN;

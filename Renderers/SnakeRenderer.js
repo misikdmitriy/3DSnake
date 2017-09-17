@@ -57,9 +57,9 @@ class SnakeRenderer {
     update() {
         this._movingSnake.parts.forEach(part => {
             if (part.object instanceof SnakeHead) {
-                this._updateHead(part, scene);
+                this._updateHead(part);
             } else if (part.object instanceof SnakeBody) {
-                this._updateBody(part, scene);
+                this._updateBody(part);
             } else {
                 throw new Error("unknown snake part");
             }

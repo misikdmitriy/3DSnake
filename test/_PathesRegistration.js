@@ -5,7 +5,7 @@ let vm = require("vm");
 
 let pathes = ["./Helpers/Helpers.js", "./Entities/MovingObject.js", "./Entities/GameMap.js",
     "./Entities/Direction.js", "./Entities/Food.js", "./Entities/Snake.js",
-    "./Controllers/PlayerListener.js"];
+    "./Controllers/PlayerController.js"];
 
 pathes.forEach(function (path) {
     let code = fs.readFileSync(path);

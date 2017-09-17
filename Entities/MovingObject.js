@@ -128,6 +128,10 @@ class MovingObjectComposit {
     }
 
     move(direction) {
+        if (direction === Direction.NODIRECTION) {
+            return;
+        }
+
         let nextPosition = this.position;
 
         this._movingObjs[0].move(direction);
