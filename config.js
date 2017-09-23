@@ -1,4 +1,4 @@
 var CONFIG = {
-    "debug": false,
+    "debug": true,
     "speed": 1000
 };

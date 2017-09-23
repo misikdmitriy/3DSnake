@@ -12,16 +12,20 @@
     let movingSnake = new PartsMovingObject(snake, { x: 4, y: 5 }, false, Direction.LEFT);
     let snakeRenderer = new SnakeRenderer(movingSnake);
     
-    let cameraRenderer = new CameraRenderer2D(movingSnake);
+    let cameraRenderer = new CameraRenderer3D(movingSnake);
 
     let player = new PlayerController(document, DefaultControls);
     player.object = movingSnake;
 
+    let renderers = CONFIG.debug ? [snakeRenderer, mapRenderer]
+        : [snakeRenderer, cameraRenderer, mapRenderer];
+
     let controller = new GameController([player], 
-        [snakeRenderer, cameraRenderer, mapRenderer], threeProxy);
+        renderers, threeProxy);
 
     if (CONFIG.debug) {
         threeProxy.addTrackball();
+        cameraRenderer.render(threeProxy);
     }
 
     let lightFactory = new LightFactory();
