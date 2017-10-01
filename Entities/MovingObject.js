@@ -54,7 +54,7 @@ class MovingObject {
     }
 
     move(direction) {
-        this._memento.state = this._pos;
+        this._memento.state = { x: this._pos.x, y: this._pos.y };
         this._pos = nextPosition(direction, this.position);
     }
 
@@ -146,7 +146,7 @@ class MovingObjectComposit {
             let savedPosition = this._movingObjs[i].position;
             this._movingObjs[i]._pos = nextPosition;
 
-            this._movingObjs[i]._memento.state = savedPosition; 
+            this._movingObjs[i]._memento.state = savedPosition;
             nextPosition = savedPosition;
         }
 
