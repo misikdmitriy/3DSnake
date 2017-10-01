@@ -23,6 +23,7 @@ describe("PlayerController tests", function () {
             addObject: function () { },
             replaceObject: function () { return true; }
         };
+        playerListener.subscribe();
 
         let event = new CustomEvent("keydown");
         event.keyCode = DefaultControls.UP;
@@ -45,7 +46,8 @@ describe("PlayerController tests", function () {
             addObject: function () { },
             replaceObject: function () { return false; }
         };
-
+        playerListener.subscribe();
+        
         let event = new CustomEvent("keydown");
         event.keyCode = DefaultControls.UP;
         document.dispatchEvent(event);

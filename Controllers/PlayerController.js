@@ -7,6 +7,11 @@ let DefaultControls = {
     LEFT: 65 // A
 };
 
+let Default3DControls = {
+    LEFT: 68, // D
+    RIGHT: 65 // A
+};
+
 class GameOverError extends Error {
     constructor(loser) {
         super();
@@ -18,41 +23,13 @@ class GameOverError extends Error {
     }
 }
 
-class PlayerController {
-    constructor(target, controls) {
+class BasePlayerController {
+    constructor(target, controls, initialDirection) {
         this._obj = null;
         this._map = null;
 
         this._target = target;
-        this._direction = Direction.NODIRECTION;
-
-        let self = this;
-        this._listener = function (event) {
-            if (event.defaultPrevented) {
-                return;
-            }
-
-            let newDirection = null;
-
-            if (event.keyCode === controls.UP) {
-                newDirection = Direction.UP;
-            }
-            else if (event.keyCode === controls.RIGHT) {
-                newDirection = Direction.RIGHT;
-            }
-            else if (event.keyCode === controls.DOWN) {
-                newDirection = Direction.DOWN;
-            }
-            else if (event.keyCode === controls.LEFT) {
-                newDirection = Direction.LEFT;
-            }
-
-            if (self._obj !== null && self._obj.availableMoves.indexOf(newDirection) !== -1) {
-                self._direction = newDirection;
-            }
-        };
-
-        this._target.addEventListener("keydown", this._listener);
+        this._direction = initialDirection || Direction.NODIRECTION;
     }
 
     get object() {
@@ -97,7 +74,77 @@ class PlayerController {
         }
     }
 
+    subscribe() {
+        this._target.addEventListener("keydown", this._listener);        
+    }
+
     dispose() {
         this._target.removeEventListener("keydown", this._listener);
+    }
+}
+
+class PlayerController extends BasePlayerController {
+    constructor(target, controls, initialDirection) {
+        super(target, controls, initialDirection);
+
+        let self = this;
+        this._listener = function (event) {
+            if (event.defaultPrevented) {
+                return;
+            }
+
+            let newDirection = null;
+
+            if (event.keyCode === controls.UP) {
+                newDirection = Direction.UP;
+            }
+            else if (event.keyCode === controls.RIGHT) {
+                newDirection = Direction.RIGHT;
+            }
+            else if (event.keyCode === controls.DOWN) {
+                newDirection = Direction.DOWN;
+            }
+            else if (event.keyCode === controls.LEFT) {
+                newDirection = Direction.LEFT;
+            }
+
+            if (self._obj !== null && self._obj.availableMoves.indexOf(newDirection) !== -1) {
+                self._direction = newDirection;
+            }
+        };
+    }
+}
+
+class Player3DController extends BasePlayerController {
+    constructor(target, controls, initialDirection) {
+        super(target, controls);
+
+        this._direction = initialDirection || Direction.NODIRECTION;
+
+        let self = this;
+        this._listener = function (event) {
+            if (event.defaultPrevented) {
+                return;
+            }
+
+            let newDirection = self._direction;
+
+            if (event.keyCode === controls.RIGHT) {
+                newDirection *= 2;
+                if (newDirection >= Direction.NODIRECTION) {
+                    newDirection = Direction.UP;
+                }
+            }
+            else if (event.keyCode === controls.LEFT) {
+                newDirection /= 2;
+                if (newDirection < Direction.UP) {
+                    newDirection = Direction.LEFT;
+                }
+            }
+
+            if (self._obj.availableMoves.indexOf(newDirection) !== -1) {
+                self._direction = newDirection;
+            }
+        };
     }
 }

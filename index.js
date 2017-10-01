@@ -6,22 +6,18 @@
     let threeProxy = new ThreeProxy(600, 400);
 
     let gameMap = new GameMap(50, 50);
-    let mapRenderer = new MapRenderer(gameMap);
-    
+
     let snake = new Snake(5);
     let movingSnake = new PartsMovingObject(snake, { x: 4, y: 5 }, false, Direction.LEFT);
-    let snakeRenderer = new SnakeRenderer(movingSnake, gameMap);
-    
-    let cameraRenderer = new CameraRenderer2D(movingSnake);
 
-    let player = new PlayerController(document, DefaultControls);
-    player.object = movingSnake;
-    player.map = gameMap;
+    let gameObjects = new GameFactory2D().create({ movingSnake: movingSnake, gameMap: gameMap });
 
-    let renderers = CONFIG.debug ? [snakeRenderer, mapRenderer]
-        : [snakeRenderer, cameraRenderer, mapRenderer];
+    let renderers = CONFIG.debug ? [gameObjects.snake, gameObjects.map]
+        : [gameObjects.snake, gameObjects.camera, gameObjects.map];
 
-    let controller = new GameController([player], 
+    gameObjects.player.subscribe();
+
+    let controller = new GameController([gameObjects.player],
         renderers, threeProxy);
 
     if (CONFIG.debug) {
