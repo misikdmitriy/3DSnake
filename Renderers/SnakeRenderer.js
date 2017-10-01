@@ -35,9 +35,8 @@ class SnakeRenderer {
     _renderHead(head, scene) {
         let size = SnakeRenderer.SIZE;
 
-        let texture = new THREE.TextureLoader().load("textures/snakehead.jpg");
         let geometry = new THREE.BoxBufferGeometry(size, size, size);
-        let material = ThreeHelpers.createMaterial({ map: texture });
+        let material = ThreeHelpers.createMaterial({ color: 0x00ff00 });
         this._head = new THREE.Mesh(geometry, material);
 
         this._updateHead(head);
@@ -78,7 +77,7 @@ class SnakeRenderer {
         let mapSize = MapRenderer.SIZE;
 
         this._head.position.set(head.position.x * mapSize, head.position.y * mapSize, mapSize / 2);
-        this._head.rotation.set(Math.PI / 4, Math.PI / 4, 0);
+        this._head.rotation.set(0, Math.PI / 4, Math.PI / 4);
     }
 
     _updateBody(body, next) {

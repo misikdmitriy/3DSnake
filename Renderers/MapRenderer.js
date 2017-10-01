@@ -16,14 +16,21 @@ class MapRenderer {
     render(scene) {
         let size = MapRenderer.SIZE;
 
-        let texture = new THREE.TextureLoader().load("textures/map.jpg");
         let geometry = new THREE.BoxGeometry(size, size, size);
         this._cubes = [];
 
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
         for (let i = 0; i < this._map.height; i++) {
             let material = ThreeHelpers.createMaterial({
-                map: texture,
-                color: 0xaaaaaa
+                color: getRandomColor()
             });
 
             for (let j = 0; j < this._map.width; j++) {

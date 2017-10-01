@@ -155,7 +155,7 @@ describe("GameMap tests", function () {
         assert(map.replaceObject(new MovingObject(null, { x: 3, y: 4 })) === false);
     });
 
-    it("replace should throw error", function () {
+    it("replace should reset state", function () {
         let pos1 = { x: 3, y: 1 };
         let pos2 = { x: 4, y: 2 };
 
@@ -167,9 +167,9 @@ describe("GameMap tests", function () {
         map.addObject(obj2);
 
         obj2.move(Direction.LEFT);
-        let act = function () { map.replaceObject(obj2); };
+        let result = map.replaceObject(obj2);
 
-        chai.expect(act).to.throw();
+        assert(result === false);
     });
 
     it("objects should return all map objects 1", function() {

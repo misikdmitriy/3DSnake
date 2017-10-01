@@ -10,12 +10,13 @@
     
     let snake = new Snake(5);
     let movingSnake = new PartsMovingObject(snake, { x: 4, y: 5 }, false, Direction.LEFT);
-    let snakeRenderer = new SnakeRenderer(movingSnake);
+    let snakeRenderer = new SnakeRenderer(movingSnake, gameMap);
     
     let cameraRenderer = new CameraRenderer3D(movingSnake);
 
     let player = new PlayerController(document, DefaultControls);
     player.object = movingSnake;
+    player.map = gameMap;
 
     let renderers = CONFIG.debug ? [snakeRenderer, mapRenderer]
         : [snakeRenderer, cameraRenderer, mapRenderer];

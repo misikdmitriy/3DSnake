@@ -19,13 +19,40 @@ describe("PlayerController tests", function () {
             move: function (dir) { i = dir; },
             availableMoves: [Direction.UP]
         };
+        playerListener.map = {
+            addObject: function () { },
+            replaceObject: function () { return true; }
+        };
 
         let event = new CustomEvent("keydown");
-        event.keyCode = DefaultControls.UP; 
+        event.keyCode = DefaultControls.UP;
         document.dispatchEvent(event);
-        
+
         playerListener.move();
 
         assert(i === Direction.UP);
+    });
+
+    it("event listener should reset position", function () {
+        let playerListener = new PlayerController(document, DefaultControls);
+        let i = 0;
+        playerListener.object = {
+            move: function () { },
+            availableMoves: [Direction.UP],
+            resetPosition: function () { i++; }
+        };
+        playerListener.map = {
+            addObject: function () { },
+            replaceObject: function () { return false; }
+        };
+
+        let event = new CustomEvent("keydown");
+        event.keyCode = DefaultControls.UP;
+        document.dispatchEvent(event);
+
+        let act = function () { playerListener.move(); };
+
+        chai.expect(act).to.throw();        
+        assert(i > 0);
     });
 });

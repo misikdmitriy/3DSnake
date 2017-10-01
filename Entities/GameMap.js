@@ -13,7 +13,7 @@ class GameMap {
         this._map = [];
 
         for (let i = 0; i < this._height; i++) {
-            var pushable = [];
+            let pushable = [];
             for (let j = 0; j < this._width; j++) {
                 pushable.push([]);
             }
@@ -90,9 +90,17 @@ class GameMap {
     }
 
     replaceObject(object) {
-        if (this.removeObject(object)) {
-            this.addObject(object);
-            return true;
+        let memento = new GameMapMemento();
+        memento.setState(this);
+
+        try {
+            if (this.removeObject(object)) {
+                this.addObject(object);
+                return true;
+            }
+        }
+        catch (err) {
+            memento.updateState(this);
         }
 
         return false;

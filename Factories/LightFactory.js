@@ -4,17 +4,21 @@ class LightFactory {
     constructor() { }
 
     createLight(gameMap) {
-        // ToDo: impl
+        let size = MapRenderer.SIZE;
         
         if (!(gameMap instanceof GameMap)) {
             throw new Error("expected GameMap");
         }
 
-        return [ThreeHelpers.createDirectionalLight(0xffffff, 0.5, 15, 0, 0),
-                ThreeHelpers.createDirectionalLight(0xffffff, 0.5, -15, 0, 0),
-                ThreeHelpers.createDirectionalLight(0xffffff, 0.5, 0, 15, 0),
-                ThreeHelpers.createDirectionalLight(0xffffff, 0.5, 0, -15, 0),
-                ThreeHelpers.createDirectionalLight(0xffffff, 0.5, 0, 0, 15),
-                ThreeHelpers.createDirectionalLight(0xffffff, 0.5, 0, 0, -15)];
+        let result = [];
+
+        for (let i = 0; i < gameMap.width; i += 5) {
+            for (let j = 0; j < gameMap.height; j += 5) {
+                result.push(ThreeHelpers.createPointLight(0xffffff, 1.5, 30, 
+                    i * size, j * size, size));
+            }
+        }
+
+        return result;
     }
 }

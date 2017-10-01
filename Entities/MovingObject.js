@@ -19,6 +19,7 @@ class MovingObject {
 
         this._obj = obj;
         this._canColise = canColise || false;
+        this._memento = new Memento();
     }
 
     get position() {
@@ -53,7 +54,12 @@ class MovingObject {
     }
 
     move(direction) {
+        this._memento.state = this._pos;
         this._pos = nextPosition(direction, this.position);
+    }
+
+    resetPosition() {
+        this._pos = this._memento.state;
     }
 }
 
@@ -140,11 +146,18 @@ class MovingObjectComposit {
             let savedPosition = this._movingObjs[i].position;
             this._movingObjs[i]._pos = nextPosition;
 
+            this._movingObjs[i]._memento.state = savedPosition; 
             nextPosition = savedPosition;
         }
 
         if (!this.canColise && this.isColise) {
             throw new CollisionException();
+        }
+    }
+
+    resetPosition() {
+        for (let i = 0; i < this._movingObjs.length; i++) {
+            this._movingObjs[i].resetPosition();
         }
     }
 
