@@ -1,14 +1,15 @@
 // jshint esversion: 6
 
 let DefaultControls = {
-    UP: 87, // W
+    UP: 83, // S
     RIGHT: 68, // D
-    DOWN: 83, // S
+    DOWN: 87, // W
     LEFT: 65 // A
 };
 
 class GameOverError extends Error {
     constructor(loser) {
+        super();
         this._loser = loser;
     }
 
