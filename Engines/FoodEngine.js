@@ -9,6 +9,14 @@ class FoodEngine {
         this._food = food;
         this._mapWidth = mapWidth;
         this._mapHeight = mapHeight;
+
+        let self = this;
+
+        eventDispatcher.subscribe("foodAccepted", (params) => {
+            if (params.food === params.food) {
+                self.update();
+            }
+        });
     }
 
     update() {
@@ -18,5 +26,9 @@ class FoodEngine {
 
     get food() {
         return this._food;
+    }
+
+    dispose() {
+        // ToDo: add dispose
     }
 }

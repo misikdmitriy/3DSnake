@@ -16,7 +16,8 @@
     let gameObjects = new GameFactory3D().create({
         movingSnake: movingSnake,
         gameMap: gameMap,
-        food: movingFood
+        food: movingFood,
+        realSnake: snake
     });
 
     let renderers = CONFIG.debug ? [gameObjects.snake, gameObjects.map, gameObjects.food]
@@ -25,7 +26,7 @@
     gameObjects.player.subscribe();
 
     let controller = new GameController([gameObjects.player],
-        renderers, threeProxy);
+        renderers, threeProxy, CONFIG.speed);
 
     if (CONFIG.debug) {
         threeProxy.addTrackball();

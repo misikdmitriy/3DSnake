@@ -1,10 +1,15 @@
 // jshint esversion: 6
 
 class GameController {
-    constructor(controllers, renderers, scene) {
+    static get BOOST() {
+        return 0.98;
+    }
+
+    constructor(controllers, renderers, scene, speed) {
         this._controllers = controllers;
         this._renderers = renderers;
         this._scene = scene;
+        this._speed = speed;
 
         let self = this;
 
@@ -22,13 +27,27 @@ class GameController {
             });
         };
 
-        setInterval(this._tact, CONFIG.speed);
+        this._timer = setInterval(this._tact, this._speed);
+
+        eventDispatcher.subscribe("foodAccepted", params => {
+            self.accelerate();
+        });
+
+        eventDispatcher.subscribe("gameOver", params => {
+            self.dispose();
+        });
+    }
+
+    accelerate() {
+        clearInterval(this._timer);
+        this._speed *= GameController.BOOST;
+        this._timer = setInterval(this._tact, this._speed);
     }
 
     dispose() {
-        clearInterval(this._tact);
+        clearInterval(this._timer);
 
-        controllers.forEach(controller => {
+        this._controllers.forEach(controller => {
             controller.dispose();
         });
     }

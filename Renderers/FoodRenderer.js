@@ -17,6 +17,8 @@ class FoodRenderer {
         this._mesh = new THREE.Mesh(geometry, material);
 
         scene.add(this._mesh);
+
+        this.update();
     }
 
     update() {

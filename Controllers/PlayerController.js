@@ -24,49 +24,18 @@ class GameOverError extends Error {
 }
 
 class BasePlayerController {
-    constructor(target, controls, initialDirection) {
-        this._obj = null;
-        this._map = null;
+    constructor(target, controls, initialDirection, params) {
+        this._obj = params.movingSnake;
+        this._map = params.gameMap;
+        this._snake = params.realSnake;
         this._feed = [];
+
+        this._map.addObject(this._obj);
 
         this._target = target;
         this._direction = initialDirection || Direction.NODIRECTION;
-    }
 
-    get object() {
-        return this._obj;
-    }
-
-    set object(obj) {
-        if (this._map !== null && this._obj !== null) {
-            this._map.removeObject(this._obj);
-        }
-
-        this._obj = obj;
-
-        if (this._map !== null) {
-            this._map.addObject(this._obj);
-        }
-    }
-
-    get map() {
-        return this._map;
-    }
-
-    set map(map) {
-        if (this._map !== null && this._obj !== null) {
-            this._map.removeObject(this._obj);
-        }
-
-        this._map = map;
-
-        if (this._obj !== null) {
-            this._map.addObject(this._obj);
-        }
-    }
-
-    addFood(food) {
-        this._feed.push(food);
+        let self = this;
     }
 
     move() {
@@ -74,6 +43,7 @@ class BasePlayerController {
             this._obj.move(this._direction);
             if (!this._map.replaceObject(this._obj)) {
                 this._obj.resetPosition();
+                eventDispatcher.publish("gameOver");
                 throw new GameOverError(this._obj);
             } else {
                 let objects = this._map.objectsOn(this._obj.position.x, this._obj.position.y);
@@ -82,12 +52,10 @@ class BasePlayerController {
                 });
 
                 if (feed.length > 0) {
-                    let foodEngine = this._feed.filter(el => {
-                        return el.food === feed[0];
-                    })[0];
+                    let food = feed[0].object;
 
-                    this._obj.composit.accept(foodEngine.food.object);
-                    foodEngine.update();
+                    this._snake.accept(food);
+                    eventDispatcher.publish("foodAccepted", { sender: this, food: food });
 
                     this._map.replaceObject(feed[0]);
                 }
@@ -105,8 +73,8 @@ class BasePlayerController {
 }
 
 class PlayerController extends BasePlayerController {
-    constructor(target, controls, initialDirection) {
-        super(target, controls, initialDirection);
+    constructor(target, controls, initialDirection, params) {
+        super(target, controls, initialDirection, params);
 
         let self = this;
         this._listener = function (event) {
@@ -137,10 +105,8 @@ class PlayerController extends BasePlayerController {
 }
 
 class Player3DController extends BasePlayerController {
-    constructor(target, controls, initialDirection) {
-        super(target, controls);
-
-        this._direction = initialDirection || Direction.NODIRECTION;
+    constructor(target, controls, initialDirection, params) {
+        super(target, controls, initialDirection, params);
 
         let self = this;
         this._listener = function (event) {

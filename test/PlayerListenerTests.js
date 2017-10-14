@@ -8,23 +8,31 @@ describe("PlayerController tests", function () {
     jsdom();
 
     it("constructor should add listeners", function () {
-        let playerListener = new PlayerController(document, DefaultControls);
+        let playerListener = new PlayerController(document, DefaultControls, Direction.NODIRECTION,
+            {
+                gameMap: {
+                    addObject: function () { }
+                }
+            });
         let event = new CustomEvent("name-of-event", { "detail": "Example of an event" });
     });
 
     it("event listener should be added", function () {
-        let playerListener = new PlayerController(document, DefaultControls);
         let i = 0;
-        playerListener.object = {
-            move: function (dir) { i = dir; },
-            availableMoves: [Direction.UP],
-            position: { x: 1, y: 2 }
-        };
-        playerListener.map = {
-            addObject: function () { },
-            replaceObject: function () { return true; },
-            objectsOn: function () { return []; }
-        };
+
+        let playerListener = new PlayerController(document, DefaultControls, Direction.NODIRECTION,
+            {
+                gameMap: {
+                    addObject: function () { },
+                    replaceObject: function () { return true; },
+                    objectsOn: function () { return []; }
+                },
+                movingSnake: {
+                    move: function (dir) { i = dir; },
+                    availableMoves: [Direction.UP],
+                    position: { x: 1, y: 2 }
+                }
+            });
         playerListener.subscribe();
 
         let event = new CustomEvent("keydown");
@@ -37,17 +45,22 @@ describe("PlayerController tests", function () {
     });
 
     it("event listener should reset position", function () {
-        let playerListener = new PlayerController(document, DefaultControls);
         let i = 0;
-        playerListener.object = {
-            move: function () { },
-            availableMoves: [Direction.UP],
-            resetPosition: function () { i++; }
-        };
-        playerListener.map = {
-            addObject: function () { },
-            replaceObject: function () { return false; }
-        };
+        let playerListener = new PlayerController(document, DefaultControls, Direction.NODIRECTION,
+            {
+                gameMap: {
+                    move: function () { },
+                    availableMoves: [Direction.UP],
+                    addObject: function () { },
+                    resetPosition: function () { i++; },
+                    replaceObject: function () { return false; }
+                },
+                movingSnake: {
+                    move: function () { },
+                    availableMoves: [Direction.UP],
+                    resetPosition: function () { i++; }
+                }
+            });
         playerListener.subscribe();
 
         let event = new CustomEvent("keydown");

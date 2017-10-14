@@ -2,14 +2,10 @@
 
 class GameFactory2D {
     create(params) {
-        let player = new PlayerController(document, DefaultControls, Direction.NODIRECTION);
-        player.object = params.movingSnake;
-        player.map = params.gameMap;
+        let player = new PlayerController(document, DefaultControls, Direction.NODIRECTION, params);
 
         let foodEngine = new FoodEngine(params.food, params.gameMap.width, params.gameMap.height);
         foodEngine.update();
-
-        player.addFood(foodEngine);
 
         params.gameMap.addObject(params.food);
 
@@ -25,14 +21,10 @@ class GameFactory2D {
 
 class GameFactory3D {
     create(params) {
-        let player = new Player3DController(document, Default3DControls, Direction.RIGHT);
-        player.object = params.movingSnake;
-        player.map = params.gameMap;
+        let player = new Player3DController(document, Default3DControls, Direction.RIGHT, params);
 
         let foodEngine = new FoodEngine(params.food, params.gameMap.width, params.gameMap.height);
         foodEngine.update();
-        
-        player.addFood(foodEngine);
 
         params.gameMap.addObject(params.food);
 
