@@ -27,6 +27,7 @@ class BasePlayerController {
     constructor(target, controls, initialDirection) {
         this._obj = null;
         this._map = null;
+        this._feed = [];
 
         this._target = target;
         this._direction = initialDirection || Direction.NODIRECTION;
@@ -64,18 +65,38 @@ class BasePlayerController {
         }
     }
 
+    addFood(food) {
+        this._feed.push(food);
+    }
+
     move() {
         if (this._obj !== null && this._map !== null) {
             this._obj.move(this._direction);
             if (!this._map.replaceObject(this._obj)) {
                 this._obj.resetPosition();
                 throw new GameOverError(this._obj);
+            } else {
+                let objects = this._map.objectsOn(this._obj.position.x, this._obj.position.y);
+                let feed = objects.filter(el => {
+                    return el.object instanceof Food;
+                });
+
+                if (feed.length > 0) {
+                    let foodEngine = this._feed.filter(el => {
+                        return el.food === feed[0];
+                    })[0];
+
+                    this._obj.composit.accept(foodEngine.food.object);
+                    foodEngine.update();
+
+                    this._map.replaceObject(feed[0]);
+                }
             }
         }
     }
 
     subscribe() {
-        this._target.addEventListener("keydown", this._listener);        
+        this._target.addEventListener("keydown", this._listener);
     }
 
     dispose() {

@@ -63,7 +63,7 @@ class GameMap {
                 return prev && curr.canColise;
             }, true);
 
-            if (currentObj.length === 0 || (canBePushed && obj.canColise)) {
+            if (currentObj.length === 0 || canBePushed || obj.canColise) {
                 self._map[pos.y][pos.x].push(object);
             }
             else {

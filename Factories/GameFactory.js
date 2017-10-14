@@ -6,11 +6,19 @@ class GameFactory2D {
         player.object = params.movingSnake;
         player.map = params.gameMap;
 
+        let foodEngine = new FoodEngine(params.food, params.gameMap.width, params.gameMap.height);
+        foodEngine.update();
+
+        player.addFood(foodEngine);
+
+        params.gameMap.addObject(params.food);
+
         return {
             "camera": new CameraRenderer2D(params.movingSnake),
             "player": player,
             "snake": new SnakeRenderer(params.movingSnake, params.gameMap),
-            "map": new MapRenderer(params.gameMap)
+            "map": new MapRenderer(params.gameMap),
+            "food": new FoodRenderer(params.food),
         };
     }
 }
@@ -21,11 +29,19 @@ class GameFactory3D {
         player.object = params.movingSnake;
         player.map = params.gameMap;
 
+        let foodEngine = new FoodEngine(params.food, params.gameMap.width, params.gameMap.height);
+        foodEngine.update();
+        
+        player.addFood(foodEngine);
+
+        params.gameMap.addObject(params.food);
+
         return {
             "camera": new CameraRenderer3D(params.movingSnake),
             "player": player,
             "snake": new SnakeRenderer(params.movingSnake, params.gameMap),
-            "map": new MapRenderer(params.gameMap)
+            "map": new MapRenderer(params.gameMap),
+            "food": new FoodRenderer(params.food)
         };
     }
 }

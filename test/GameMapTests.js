@@ -62,6 +62,16 @@ describe("GameMap tests", function () {
         map.addObject(obj1);
         map.addObject(obj2);
     });
+    
+    it("addObject should do it even if one deny collisions", function () {
+        let pos = { x: 5, y: 2 };
+        let obj1 = new MovingObject(null, pos, true);
+        let obj2 = new MovingObject(null, pos, false);
+        let map = new GameMap(13, 25);
+
+        map.addObject(obj1); 
+        map.addObject(obj2);
+    });
 
     it("addObject should throw error 1", function () {
         let pos = { x: 5, y: 20 };
@@ -83,18 +93,8 @@ describe("GameMap tests", function () {
 
     it("addObject should throw error 3", function () {
         let pos = { x: 5, y: 2 };
-        let obj1 = new MovingObject(null, pos, true);
-        let obj2 = new MovingObject(null, pos, false);
-        let map = new GameMap(13, 25);
-
-        let act = function () { map.addObject(obj1); map.addObject(obj2); };
-        chai.expect(act).to.throw();
-    });
-
-    it("addObject should throw error 4", function () {
-        let pos = { x: 5, y: 2 };
         let obj1 = new MovingObject(null, pos, false);
-        let obj2 = new MovingObject(null, pos, true);
+        let obj2 = new MovingObject(null, pos, false);
         let map = new GameMap(13, 25);
 
         let act = function () { map.addObject(obj1); map.addObject(obj2); };

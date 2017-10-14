@@ -181,5 +181,10 @@ class MovingObjectComposit {
 class PartsMovingObject extends MovingObjectComposit {
     constructor(partsComposit, pos, canColise, growDirection) {
         super(partsComposit.parts, pos, canColise, growDirection);
+        this._composit = partsComposit;
+    }
+
+    get composit() {
+        return this._composit;
     }
 }

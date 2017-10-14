@@ -17,11 +17,13 @@ describe("PlayerController tests", function () {
         let i = 0;
         playerListener.object = {
             move: function (dir) { i = dir; },
-            availableMoves: [Direction.UP]
+            availableMoves: [Direction.UP],
+            position: { x: 1, y: 2 }
         };
         playerListener.map = {
             addObject: function () { },
-            replaceObject: function () { return true; }
+            replaceObject: function () { return true; },
+            objectsOn: function () { return []; }
         };
         playerListener.subscribe();
 
@@ -47,14 +49,14 @@ describe("PlayerController tests", function () {
             replaceObject: function () { return false; }
         };
         playerListener.subscribe();
-        
+
         let event = new CustomEvent("keydown");
         event.keyCode = DefaultControls.UP;
         document.dispatchEvent(event);
 
         let act = function () { playerListener.move(); };
 
-        chai.expect(act).to.throw();        
+        chai.expect(act).to.throw();
         assert(i > 0);
     });
 });
