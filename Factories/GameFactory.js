@@ -4,7 +4,7 @@ class GameFactory2D {
     create(params) {
         let player = new PlayerController(document, DefaultControls, Direction.NODIRECTION, params);
 
-        let foodEngine = new FoodEngine(params.food, params.gameMap.width, params.gameMap.height);
+        let foodEngine = new FoodEngine(params.food, params.gameMap);
         foodEngine.update();
 
         params.gameMap.addObject(params.food);
@@ -23,7 +23,7 @@ class GameFactory3D {
     create(params) {
         let player = new Player3DController(document, Default3DControls, Direction.RIGHT, params);
 
-        let foodEngine = new FoodEngine(params.food, params.gameMap.width, params.gameMap.height);
+        let foodEngine = new FoodEngine(params.food, params.gameMap);
         foodEngine.update();
 
         params.gameMap.addObject(params.food);

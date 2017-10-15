@@ -1,14 +1,13 @@
 // jshint esversion: 6
 
 class FoodEngine {
-    constructor(food, mapWidth, mapHeight) {
+    constructor(food, map) {
         if (!(food instanceof MovingObject)) {
-            throw new Error("expected moving food");            
+            throw new Error("expected moving food");
         }
 
         this._food = food;
-        this._mapWidth = mapWidth;
-        this._mapHeight = mapHeight;
+        this._map = map;
 
         let self = this;
 
@@ -20,8 +19,13 @@ class FoodEngine {
     }
 
     update() {
-        this._food._pos.x = Math.floor(Math.random() * this._mapWidth);
-        this._food._pos.y = Math.floor(Math.random() * this._mapHeight);
+        let updated = false;
+        while (!updated) {
+            this._food._pos.x = Math.floor(Math.random() * this._map.width);
+            this._food._pos.y = Math.floor(Math.random() * this._map.height);
+
+            updated = this._map.objectsOn(this._food.position.x, this._food.position.y).length === 0;
+        }
     }
 
     get food() {
