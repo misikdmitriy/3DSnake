@@ -29,13 +29,16 @@ class GameController {
 
         this._timer = setInterval(this._tact, this._speed);
 
-        eventDispatcher.subscribe("foodAccepted", params => {
+        this._foodAcceptedListener = params => {
             self.accelerate();
-        });
+        };
 
-        eventDispatcher.subscribe("gameOver", params => {
+        this._gameOverListener = params => {
             self.dispose();
-        });
+        };
+
+        eventDispatcher.subscribe("foodAccepted", this._foodAcceptedListener);
+        eventDispatcher.subscribe("gameOver", this._gameOverListener);
     }
 
     accelerate() {
@@ -50,5 +53,8 @@ class GameController {
         this._controllers.forEach(controller => {
             controller.dispose();
         });
+
+        eventDispatcher.unsubscribe("foodAccepted", this._foodAcceptedListener);
+        eventDispatcher.unsubscribe("gameOver", this._gameOverListener);
     }
 }

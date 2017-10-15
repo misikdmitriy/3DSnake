@@ -11,11 +11,13 @@ class FoodEngine {
 
         let self = this;
 
-        eventDispatcher.subscribe("foodAccepted", (params) => {
+        this._foodAcceptedListener = params => {
             if (params.food === params.food) {
                 self.update();
             }
-        });
+        };
+
+        eventDispatcher.subscribe("foodAccepted", this._foodAcceptedListener);
     }
 
     update() {
@@ -33,6 +35,6 @@ class FoodEngine {
     }
 
     dispose() {
-        // ToDo: add dispose
+        eventDispatcher.unsubscribe("foodAccepted", this._foodAcceptedListener);
     }
 }

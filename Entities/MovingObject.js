@@ -61,6 +61,10 @@ class MovingObject {
     resetPosition() {
         this._pos = this._memento.state;
     }
+
+    dispose() {
+        // empty method
+    }
 }
 
 class MovingObjectComposit {
@@ -94,16 +98,21 @@ class MovingObjectComposit {
 
         let self = this;
 
-        eventDispatcher.subscribe("objectUpdated", params => {
+        this._objectUpdated = params => {
             if (params.sender === self.object) {
                 self._movingObjs.push(new MovingObject(params.object,
-                    nextPosition(growDirection, 
+                    nextPosition(growDirection,
                         self._movingObjs[self._movingObjs.length - 1].position),
                     canColise));
-                
-                //ToDo: finish renderer
+
+                eventDispatcher.publish("movingObjectUpdated", {
+                    sender: self.parts[0],
+                    object: self._movingObjs[self._movingObjs.length - 1]
+                });
             }
-        });
+        };
+
+        eventDispatcher.subscribe("objectUpdated", this._objectUpdated);
     }
 
     get position() {
@@ -188,6 +197,10 @@ class MovingObjectComposit {
 
     get canColise() {
         return this._movingObjs[0].canColise;
+    }
+
+    dispose() {
+        eventDispatcher.unsubscribe("objectUpdated", this._objectUpdated);        
     }
 }
 

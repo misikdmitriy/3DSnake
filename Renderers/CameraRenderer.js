@@ -19,8 +19,7 @@ class CameraRenderer3D {
         let snakeSize = SnakeRenderer.SIZE;
 
         let head = this._movingSnake.parts.filter(part => part.object instanceof SnakeHead)[0];
-        let body = this._movingSnake.parts.filter(part => part.object instanceof SnakeBody)
-                    .slice(-1)[0];
+        let body = this._movingSnake.parts.filter(part => part.object instanceof SnakeBody)[2];
 
         this._camera.position.set(body.position.x * mapSize, body.position.y * mapSize, 2 * mapSize);
         this._camera.up = new THREE.Vector3(0, 0, 1);

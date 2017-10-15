@@ -11,15 +11,26 @@ class SnakeRenderer {
         }
 
         this._movingSnake = movingSnake;
+
+        let self = this;
+
+        eventDispatcher.subscribe("movingObjectUpdated", params => {
+            if (this._movingSnake.parts[0] === params.sender) {
+                self._renderBody(params.object,
+                    self._movingSnake.parts[self._movingSnake.parts.length - 1],
+                    self._scene);
+            }
+        });
     }
 
     render(scene) {
         this._bodies = [];
         this._head = null;
+        this._scene = scene;
 
         for (let i = 0; i < this._movingSnake.parts.length; i++) {
             let part = this._movingSnake.parts[i];
-            let next = i < this._movingSnake.parts.length - 1 ? this._movingSnake.parts[i + 1] 
+            let next = i < this._movingSnake.parts.length - 1 ? this._movingSnake.parts[i + 1]
                 : this._movingSnake.parts[i - 1];
 
             if (part.object instanceof SnakeHead) {
@@ -60,7 +71,7 @@ class SnakeRenderer {
     update(scene) {
         for (let i = 0; i < this._movingSnake.parts.length; i++) {
             let part = this._movingSnake.parts[i];
-            let next = i < this._movingSnake.parts.length - 1 ? this._movingSnake.parts[i + 1] 
+            let next = i < this._movingSnake.parts.length - 1 ? this._movingSnake.parts[i + 1]
                 : this._movingSnake.parts[i - 1];
 
             if (part.object instanceof SnakeHead) {

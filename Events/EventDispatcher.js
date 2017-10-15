@@ -13,6 +13,14 @@ class EventDispatcher {
         this._listeners[event].push(listener);
     }
 
+    unsubscribe(event, listener) {
+        let index = this._listeners[event].indexOf(listener);
+
+        if (index > -1) {
+            this._listeners[event].splice(index, 1);
+        }
+    }
+
     publish(event, params) {
         if (this._listeners[event]) {
             this._listeners[event].forEach(callback => {
