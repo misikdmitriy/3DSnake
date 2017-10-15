@@ -91,6 +91,19 @@ class MovingObjectComposit {
                 canColise));
             last = this._movingObjs[this._movingObjs.length - 1];
         }
+
+        let self = this;
+
+        eventDispatcher.subscribe("objectUpdated", params => {
+            if (params.sender === self.object) {
+                self._movingObjs.push(new MovingObject(params.object,
+                    nextPosition(growDirection, 
+                        self._movingObjs[self._movingObjs.length - 1].position),
+                    canColise));
+                
+                //ToDo: finish renderer
+            }
+        });
     }
 
     get position() {

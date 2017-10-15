@@ -103,7 +103,7 @@ class Snake {
         if (food instanceof GoodFood) {
             this._size++;
             return this._addPart();
-        } 
+        }
         if (food instanceof PoisonFood) {
             throw new SnakeDeadException();
         }
@@ -111,6 +111,7 @@ class Snake {
 
     _addPart() {
         this.last.nextPart = new SnakeBody();
+        eventDispatcher.publish("objectUpdated", { sender: this.head, object: this.last });
     }
 }
 
