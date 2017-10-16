@@ -57,7 +57,7 @@ class MapRenderer {
 
         for (let i = 0; i < this._map.height; i++) {
             let material = ThreeHelpers.createMaterial({
-                color: "0xFFFFFF"
+                color: 0xFFFFFF
             });
 
             for (let j = 0; j < height; j++) {
@@ -75,7 +75,7 @@ class MapRenderer {
 
         for (let i = 0; i < this._map.width; i++) {
             let material = ThreeHelpers.createMaterial({
-                color: "0xFFFFFF"
+                color: 0xFFFFFF
             });
 
             for (let j = 0; j < height; j++) {
