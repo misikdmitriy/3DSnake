@@ -14,6 +14,6 @@ let ThreeHelpers = {
     },
 
     createMaterial: function(params) {
-        return new THREE.MeshLambertMaterial(params);
+        return new THREE.MeshStandardMaterial(params);
     }
 };
