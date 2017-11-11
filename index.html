@@ -7,22 +7,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
-    <style>
-        body {
-            margin: 0;
-        }
-
-        canvas {
-            width: 100%;
-            height: 100%
-        }
-    </style>
+    <link rel="stylesheet" href="Styles/index.css">
 
     <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
     <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap-theme.min.css">
 </head>
 
 <body>
+
+    <div class="menu" id="menu">
+        <div class="inner-menu">
+            <span class="menu-item" id="startGame">New game</span>
+            <span class="menu-item" id="resetScores">Reset scores</span>
+        </div>
+    </div>
 
     <script src="config.js"></script>
 
@@ -37,8 +35,8 @@
 
     <script src="3DModules/ThreeProxy.js"></script>
 
-    <script src="Helpers/Helpers.js"></script>    
-    <script src="Helpers/ThreeHelpers.js"></script>    
+    <script src="Helpers/Helpers.js"></script>
+    <script src="Helpers/ThreeHelpers.js"></script>
 
     <script src="Entities/Direction.js"></script>
     <script src="Entities/Memento.js"></script>
@@ -48,19 +46,19 @@
     <script src="Entities/GameMapMemento.js"></script>
     <script src="Entities/GameMap.js"></script>
 
-    <script src="Controllers/PlayerController.js"></script>    
-    <script src="Controllers/GameController.js"></script>    
+    <script src="Controllers/PlayerController.js"></script>
+    <script src="Controllers/GameController.js"></script>
 
-    <script src="Renderers/MapRenderer.js"></script>    
-    <script src="Renderers/SnakeRenderer.js"></script>    
-    <script src="Renderers/CameraRenderer.js"></script>    
-    <script src="Renderers/FoodRenderer.js"></script>    
+    <script src="Renderers/MapRenderer.js"></script>
+    <script src="Renderers/SnakeRenderer.js"></script>
+    <script src="Renderers/CameraRenderer.js"></script>
+    <script src="Renderers/FoodRenderer.js"></script>
 
     <script src="Engines/FoodEngine.js"></script>
 
-    <script src="Factories/LightFactory.js"></script>   
-    <script src="Factories/GameFactory.js"></script>   
-    
+    <script src="Factories/LightFactory.js"></script>
+    <script src="Factories/GameFactory.js"></script>
+
     <script src="index.js"></script>
 </body>
 
