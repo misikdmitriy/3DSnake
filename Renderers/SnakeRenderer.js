@@ -49,6 +49,7 @@ class SnakeRenderer {
         let geometry = new THREE.BoxBufferGeometry(size, size, size);
         let material = ThreeHelpers.createMaterial({ color: 0x00ff00 });
         this._head = new THREE.Mesh(geometry, material);
+        this._head.castShadow = true;
 
         this._updateHead(head);
 
@@ -61,6 +62,7 @@ class SnakeRenderer {
         let geometry = new THREE.BoxBufferGeometry(size, size, size);
         let material = ThreeHelpers.createMaterial({ color: 0x00ff00 });
         let mesh = new THREE.Mesh(geometry, material);
+        mesh.castShadow = true;
         this._bodies.push({ body: body, mesh: mesh });
 
         this._updateBody(body, next);

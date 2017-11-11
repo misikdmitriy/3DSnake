@@ -40,6 +40,7 @@ class MapRenderer {
             for (let j = 0; j < this._map.width; j++) {
 
                 let cube = new THREE.Mesh(geometry, material);
+                cube.receiveShadow = true;
                 cube.position.set(size * j, size * i, 0);
                 scene.add(cube);
                 this._cubes.push(cube);

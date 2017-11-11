@@ -12,20 +12,15 @@ class LightFactory {
 
         let result = [];
 
-        result.push(ThreeHelpers.createDirectionalLight(0xffffff, 0.7, 1,
-            size * gameMap.width / 2, size * gameMap.height / 2, size * 10));
+        let light1 = ThreeHelpers.createDirectionalLight(0xffee88, 1, 1,
+            size * gameMap.width / 2, size * gameMap.height / 2, size);
+        let light2 = ThreeHelpers.createDirectionalLight(0xffffff, 1, 1,
+            size * gameMap.width / 2, size * gameMap.height / 2, size);
 
-        result.push(ThreeHelpers.createDirectionalLight(0xffffff, 0.7, 1,
-            size * gameMap.width / 4, size * gameMap.height / 4, size * 2));
+        light2.rotation.set(Math.PI / 4, Math.PI / 4, 0);
 
-        result.push(new THREE.DirectionalLightHelper(result[0], 5));
-
-        // for (let i = 0; i < gameMap.width; i += 5) {
-        //     for (let j = 0; j < gameMap.height; j += 5) {
-        //         result.push(ThreeHelpers.createDirectionalLight(0xffffff, 1.5, 30, 
-        //             i * size, j * size, size));
-        //     }
-        // }
+        result.push(light1);
+        result.push(light2);
 
         return result;
     }
