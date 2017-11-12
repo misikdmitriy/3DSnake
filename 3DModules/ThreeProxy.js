@@ -20,7 +20,7 @@ class ThreeProxy {
 
         let innerAnimate = function () {
             requestAnimationFrame(innerAnimate);
-            
+
             if (self.trackballControls) {
                 var delta = self.clock.getDelta();
                 self.trackballControls.update(delta);
@@ -30,6 +30,12 @@ class ThreeProxy {
         };
 
         innerAnimate();
+    }
+
+    dispose() {
+        while (this.scene.children.length > 0) {
+            this.scene.remove(this.scene.children[0]);
+        }
     }
 
     add(obj) {

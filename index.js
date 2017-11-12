@@ -3,9 +3,9 @@
 (function () {
     "use strict";
 
-    function startGame() {
-        let threeProxy = new ThreeProxy(640, 480);
+    let threeProxy = new ThreeProxy(640, 480);
 
+    function startGame() {
         let gameMap = new GameMap(15, 15);
 
         let snake = new Snake(5);
@@ -40,17 +40,29 @@
         });
     }
 
-    $("#startGame").click(function() {
+    let scoreRegistrator = new ScoreRegistrator();
+
+    $("#startGame").click(function () {
         startGame();
 
         $("#menu").hide();
     });
 
-    window.onerror = function(msg, url, line, col, error) {
+    $("#showScores").click(function () {
+        $("#menu").hide();
+        $("#scores").show();
+
+        console.log(scoreRegistrator.getScores());
+    });
+
+    window.onerror = function (msg, url, line, col, error) {
         if (error instanceof GameOverError) {
-            console.log("CATCH");
-            // register record
-            // show menu
+            let snake = error.loser;
+            scoreRegistrator.register(snake.parts.length);
+
+            threeProxy.dispose();
+
+            $("#menu").show();
         }
     };
 })();
