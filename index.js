@@ -52,7 +52,7 @@
         $("#menu").hide();
         $("#scores").show();
 
-        console.log(scoreRegistrator.getScores());
+        console.log(scoreRegistrator.scores);
     });
 
     window.onerror = function (msg, url, line, col, error) {

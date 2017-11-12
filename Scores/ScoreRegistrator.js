@@ -25,7 +25,7 @@ class ScoreRegistrator {
         }
     }
 
-    getScores() {
+    get scores() {
         let cookie = this._getCookie("scores");
         if (cookie) {
             return JSON.parse(cookie);
