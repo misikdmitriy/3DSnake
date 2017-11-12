@@ -52,7 +52,28 @@
         $("#menu").hide();
         $("#scores").show();
 
-        console.log(scoreRegistrator.scores);
+        let scores = scoreRegistrator.scores;
+
+        $("#scores").empty();
+
+        if (scores && scores.length) {
+            for (let i = 0; i < scores.length; i++) {
+                $("#scores").append('<span class="score">' + i + '. ' + scores[i] + '</span>');
+            }
+        }
+        else {
+            $("#scores").append('<span class="score">No scores</span>');
+        }
+
+        $("#scores").append('<span id="quit">Back</span>');
+        $("#quit").click(function() {
+            $("#menu").show();
+            $("#scores").hide();
+        });
+    });
+
+    $("#resetScores").click(function() {
+        scoreRegistrator.removeAll();
     });
 
     window.onerror = function (msg, url, line, col, error) {

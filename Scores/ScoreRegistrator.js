@@ -19,6 +19,10 @@ class ScoreRegistrator {
 
             scores.splice(i, 0, score);
 
+            while (scores.length > 6) {
+                scores.pop();
+            }
+
             document.cookie = "scores=" + JSON.stringify(scores);
         } else {
             document.cookie = "scores=" + JSON.stringify([score]);
@@ -32,6 +36,11 @@ class ScoreRegistrator {
         }
 
         return null;
+    }
+
+    removeAll() {
+        var date = new Date(0);
+        document.cookie = "scores=; path=/; expires=" + date.toUTCString();
     }
 
     _getCookie(name) {

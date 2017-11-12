@@ -15,6 +15,9 @@ canvas {
     height: 480px;
     background-color: black;
     z-index: 99;
+    color: white;
+    font-size: 25pt;
+    padding: 5px 15px;
 }
 
 .scores {
@@ -26,14 +29,19 @@ canvas {
     margin: 0 auto;
 }
 
-.menu-item {
-    color: white;
+.menu-item, .score {
     display: block;
-    font-size: 25pt;
     text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#quit {
+    text-align: right;
+    display: block;
     cursor: pointer;
 }
 
-.menu-item:hover {
+.menu-item:hover, #quit:hover {
     opacity: 0.5;
 }
