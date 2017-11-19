@@ -33,8 +33,11 @@ class MapRenderer {
         }
 
         for (let i = 0; i < this._map.height; i++) {
+            let texture = new THREE.TextureLoader().load("textures/grass.jpg");
+
             let material = ThreeHelpers.createMaterial({
-                color: getRandomColor()
+                // color: getRandomColor(),
+                map: texture
             });
 
             for (let j = 0; j < this._map.width; j++) {
@@ -56,38 +59,36 @@ class MapRenderer {
 
         let geometry = new THREE.BoxGeometry(size, size, size);
 
-        for (let i = 0; i < this._map.height; i++) {
-            let material = ThreeHelpers.createMaterial({
-                color: 0xFFFFFF
-            });
+        let texture = new THREE.TextureLoader().load("textures/wall.jpg");
+        let material = ThreeHelpers.createMaterial({
+            // color: 0xFFFFFF,
+            map: texture
+        });
 
+        for (let i = 0; i < this._map.height; i++) {
             for (let j = 0; j < height; j++) {
                 let mesh = new THREE.Mesh(geometry, material);
-                mesh.position.set(-size, size * i, j * height);
+                mesh.position.set(-size, size * i, j * size);
                 scene.add(mesh);
             }
 
             for (let j = 0; j < height; j++) {
                 let mesh = new THREE.Mesh(geometry, material);
-                mesh.position.set(this._map.width * size, size * i, j * height);
+                mesh.position.set(this._map.width * size, size * i, j * size);
                 scene.add(mesh);
             }
         }
 
         for (let i = 0; i < this._map.width; i++) {
-            let material = ThreeHelpers.createMaterial({
-                color: 0xFFFFFF
-            });
-
             for (let j = 0; j < height; j++) {
                 let mesh = new THREE.Mesh(geometry, material);
-                mesh.position.set(size * i, -size, j * height);
+                mesh.position.set(size * i, -size, j * size);
                 scene.add(mesh);
             }
 
             for (let j = 0; j < height; j++) {
                 let mesh = new THREE.Mesh(geometry, material);
-                mesh.position.set(size * i, size * this._map.height, j * height);
+                mesh.position.set(size * i, size * this._map.height, j * size);
                 scene.add(mesh);
             }
         }

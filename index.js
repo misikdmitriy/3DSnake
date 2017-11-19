@@ -14,7 +14,7 @@
         let food = new GoodFood();
         let movingFood = new MovingObject(food, { x: 6, y: 5 }, true);
 
-        let gameObjects = new GameFactory2D().create({
+        let gameObjects = new GameFactory3D().create({
             movingSnake: movingSnake,
             gameMap: gameMap,
             food: movingFood,
