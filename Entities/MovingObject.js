@@ -1,14 +1,19 @@
 // jshint esversion: 6
 
-class CollisionException extends Error { }
-
-class MovingObject {
-    static isColise(part1, part2) {
-        return part1.position.x === part2.position.x &&
-            part1.position.y === part2.position.y;
+class CollisionException extends Error { 
+    constructor(loser) {
+        super();
+        this._loser = loser;
+        eventDispatcher.publish("gameOver");        
     }
 
-    constructor(obj, position, canColise) {
+    get loser() {
+        return this._loser;
+    }
+}
+
+class MovingObject {
+    constructor(obj, position) {
         Helpers.throwIfNotInteger(position.x);
         Helpers.throwIfNotInteger(position.y);
 
@@ -18,7 +23,6 @@ class MovingObject {
         };
 
         this._obj = obj;
-        this._canColise = canColise || false;
         this._memento = new Memento();
     }
 
@@ -41,14 +45,6 @@ class MovingObject {
         return [this];
     }
 
-    get canColise() {
-        return this._canColise === true;
-    }
-
-    get isColise() {
-        return false;
-    }
-
     get availableMoves() {
         return [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT];
     }
@@ -68,19 +64,7 @@ class MovingObject {
 }
 
 class MovingObjectComposit {
-    static isColise(part1, part2) {
-        for (let i = 0; i < part1.parts.length; i++) {
-            for (let j = 0; j < part2.parts.length; j++) {
-                if (MovingObject.isColise(part1.parts[i], part2.parts[j])) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    constructor(objs, position, canColise, growDirection) {
+    constructor(objs, position, growDirection) {
         Helpers.throwIfStrictEqual(growDirection, Direction.NODIRECTION);
         Helpers.throwIfLess(objs.length, 1);
 
@@ -91,8 +75,7 @@ class MovingObjectComposit {
 
         for (let i = 0; i < objs.length; i++) {
             this._movingObjs.push(new MovingObject(objs[i],
-                last !== null ? nextPosition(growDirection, last.position) : position,
-                canColise));
+                last !== null ? nextPosition(growDirection, last.position) : position));
             last = this._movingObjs[this._movingObjs.length - 1];
         }
 
@@ -102,8 +85,7 @@ class MovingObjectComposit {
             if (params.sender === self.object) {
                 self._movingObjs.push(new MovingObject(params.object,
                     nextPosition(growDirection,
-                        self._movingObjs[self._movingObjs.length - 1].position),
-                    canColise));
+                        self._movingObjs[self._movingObjs.length - 1].position)));
 
                 eventDispatcher.publish("movingObjectUpdated", {
                     sender: self.parts[0],
@@ -171,10 +153,6 @@ class MovingObjectComposit {
             this._movingObjs[i]._memento.state = savedPosition;
             nextPosition = savedPosition;
         }
-
-        if (!this.canColise && this.isColise) {
-            throw new CollisionException();
-        }
     }
 
     resetPosition() {
@@ -183,29 +161,13 @@ class MovingObjectComposit {
         }
     }
 
-    get isColise() {
-        for (let i = 0; i < this.parts.length - 1; i++) {
-            for (let j = i + 1; j < this.parts.length; j++) {
-                if (MovingObject.isColise(this.parts[i], this.parts[j])) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    get canColise() {
-        return this._movingObjs[0].canColise;
-    }
-
     dispose() {
         eventDispatcher.unsubscribe("objectUpdated", this._objectUpdated);        
     }
 }
 
 class PartsMovingObject extends MovingObjectComposit {
-    constructor(partsComposit, pos, canColise, growDirection) {
-        super(partsComposit.parts, pos, canColise, growDirection);
+    constructor(partsComposit, pos, growDirection) {
+        super(partsComposit.parts, pos, growDirection);
     }
 }

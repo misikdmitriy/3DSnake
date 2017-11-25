@@ -9,12 +9,12 @@
         let gameMap = new GameMap(15, 15);
 
         let snake = new Snake(5);
-        let movingSnake = new PartsMovingObject(snake, { x: 4, y: 5 }, false, Direction.LEFT);
+        let movingSnake = new PartsMovingObject(snake, { x: 4, y: 5 }, Direction.LEFT);
 
         let food = new GoodFood();
-        let movingFood = new MovingObject(food, { x: 6, y: 5 }, true);
+        let movingFood = new MovingObject(food, { x: 6, y: 5 });
 
-        let gameObjects = new GameFactory3D().create({
+        let gameObjects = new GameFactory2D().create({
             movingSnake: movingSnake,
             gameMap: gameMap,
             food: movingFood,
@@ -77,7 +77,7 @@
     });
 
     window.onerror = function (msg, url, line, col, error) {
-        if (error instanceof GameOverError) {
+        if (error instanceof GameOverError || error instanceof CollisionException) {
             let snake = error.loser;
             scoreRegistrator.register(snake.parts.length);
 

@@ -102,10 +102,15 @@ class Snake {
     accept(food) {
         if (food instanceof GoodFood) {
             this._size++;
-            return this._addPart();
+            this._addPart();
+
+            eventDispatcher.publish("foodAccepted", { sender: this, food: food });
         }
         if (food instanceof PoisonFood) {
             throw new SnakeDeadException();
+        }
+        if (food instanceof SnakeBody || food instanceof SnakeHead) {
+            throw new CollisionException(this);            
         }
     }
 

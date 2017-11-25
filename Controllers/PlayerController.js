@@ -16,6 +16,7 @@ class GameOverError extends Error {
     constructor(loser) {
         super();
         this._loser = loser;
+        eventDispatcher.publish("gameOver");
     }
 
     get loser() {
@@ -43,21 +44,15 @@ class BasePlayerController {
             this._obj.move(this._direction);
             if (!this._map.replaceObject(this._obj)) {
                 this._obj.resetPosition();
-                eventDispatcher.publish("gameOver");
-                throw new GameOverError(this._obj);
+                throw new GameOverError(this._obj.object);
             } else {
                 let objects = this._map.objectsOn(this._obj.position.x, this._obj.position.y);
-                let feed = objects.filter(el => {
-                    return el.object instanceof Food;
-                });
-
-                if (feed.length > 0) {
-                    let food = feed[0].object;
-
-                    this._snake.accept(food);
-                    eventDispatcher.publish("foodAccepted", { sender: this, food: food });
-
-                    this._map.replaceObject(feed[0]);
+                if (objects.length > 1) {
+                    objects.forEach(element => {
+                        let obj = element.object;
+                        this._snake.accept(obj);
+                        this._map.replaceObject(element);
+                    });
                 }
             }
         }

@@ -58,17 +58,7 @@ class GameMap {
             Helpers.throwIfLess(pos.x, 0);
             Helpers.throwIfLess(pos.y, 0);
 
-            let currentObj = self._map[pos.y][pos.x];
-            let canBePushed = currentObj.reduce((prev, curr) => {
-                return prev && curr.canColise;
-            }, true);
-
-            if (currentObj.length === 0 || canBePushed || obj.canColise) {
-                self._map[pos.y][pos.x].push(object);
-            }
-            else {
-                throw new MapCollisionException("collision detected");
-            }
+            self._map[pos.y][pos.x].push(object);
         });
     }
 
