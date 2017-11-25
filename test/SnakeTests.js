@@ -41,24 +41,24 @@ describe("Snake tests", function () {
         assert(snake.size === 5);
     });
 
-    it("last should return it", function() {
+    it("last should return it", function () {
         let snake = EmptySnake;
         let last = snake.last;
 
         assert(last.nextPart === null);
     });
 
-    it("head should return it", function() {
+    it("head should return it", function () {
         let snake = EmptySnake;
         let head = snake.head;
 
         assert(head instanceof SnakeHead);
     });
 
-    it("parts should return array", function() {
+    it("parts should return array", function () {
         let snake = new Snake(5);
         let parts = snake.parts;
-        
+
         assert(parts.length === 5);
 
         for (let i = 0; i < 5; i++) {
@@ -66,7 +66,7 @@ describe("Snake tests", function () {
         }
     });
 
-    it("accept should grow snake", function() {
+    it("accept should grow snake", function () {
         let snake = new Snake(5);
         let food = new GoodFood();
 
@@ -75,11 +75,29 @@ describe("Snake tests", function () {
         assert(snake.size === 6);
     });
 
-    it("accept should throw exception", function() {
+    it("accept should throw exception", function () {
         let snake = new Snake(3);
         let food = new PoisonFood();
 
-        let act = function() {snake.accept(food);};
+        let act = function () { snake.accept(food); };
+
+        chai.expect(act).to.throw();
+    });
+
+    it("accept should throw exception 2", function () {
+        let snake = new Snake(3);
+        let food = new PoisonFood();
+
+        let act = function () { snake.accept(new SnakeHead()); };
+
+        chai.expect(act).to.throw();
+    });
+
+    it("accept should throw exception 3", function () {
+        let snake = new Snake(3);
+        let food = new PoisonFood();
+
+        let act = function () { snake.accept(new SnakeBody()); };
 
         chai.expect(act).to.throw();
     });

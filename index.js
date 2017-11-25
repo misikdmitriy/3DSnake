@@ -78,8 +78,7 @@
 
     window.onerror = function (msg, url, line, col, error) {
         if (error instanceof GameOverError || error instanceof CollisionException) {
-            let snake = error.loser;
-            scoreRegistrator.register(snake.parts.length);
+            scoreRegistrator.register(error.loserSize);
 
             threeProxy.dispose();
 

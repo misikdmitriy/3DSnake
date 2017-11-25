@@ -1,17 +1,5 @@
 // jshint esversion: 6
 
-class CollisionException extends Error { 
-    constructor(loser) {
-        super();
-        this._loser = loser;
-        eventDispatcher.publish("gameOver");        
-    }
-
-    get loser() {
-        return this._loser;
-    }
-}
-
 class MovingObject {
     constructor(obj, position) {
         Helpers.throwIfNotInteger(position.x);

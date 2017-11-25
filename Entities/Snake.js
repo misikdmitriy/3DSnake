@@ -1,7 +1,6 @@
 // jshint esversion: 6
 
 class IncorrectSnakePartException extends Error { }
-class SnakeDeadException extends Error { }
 
 class SnakePart {
     constructor() {
@@ -106,11 +105,9 @@ class Snake {
 
             eventDispatcher.publish("foodAccepted", { sender: this, food: food });
         }
-        if (food instanceof PoisonFood) {
-            throw new SnakeDeadException();
-        }
-        if (food instanceof SnakeBody || food instanceof SnakeHead) {
-            throw new CollisionException(this);            
+        if (food instanceof SnakeBody || food instanceof SnakeHead ||
+            food instanceof PoisonFood) {
+            throw new GameOverError(this.size);            
         }
     }
 

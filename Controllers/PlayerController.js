@@ -12,18 +12,6 @@ let Default3DControls = {
     RIGHT: 65 // A
 };
 
-class GameOverError extends Error {
-    constructor(loser) {
-        super();
-        this._loser = loser;
-        eventDispatcher.publish("gameOver");
-    }
-
-    get loser() {
-        return this._loser;
-    }
-}
-
 class BasePlayerController {
     constructor(target, controls, initialDirection, params) {
         this._obj = params.movingSnake;
@@ -44,7 +32,7 @@ class BasePlayerController {
             this._obj.move(this._direction);
             if (!this._map.replaceObject(this._obj)) {
                 this._obj.resetPosition();
-                throw new GameOverError(this._obj.object);
+                throw new GameOverError(this._obj.length);
             } else {
                 let objects = this._map.objectsOn(this._obj.position.x, this._obj.position.y);
                 if (objects.length > 1) {
