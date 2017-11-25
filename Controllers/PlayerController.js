@@ -17,7 +17,6 @@ class BasePlayerController {
         this._obj = params.movingSnake;
         this._map = params.gameMap;
         this._snake = params.realSnake;
-        this._feed = [];
 
         this._map.addObject(this._obj);
 
@@ -32,16 +31,17 @@ class BasePlayerController {
             this._obj.move(this._direction);
             if (!this._map.replaceObject(this._obj)) {
                 this._obj.resetPosition();
-                throw new GameOverError(this._obj.length);
+                throw new GameOverError(this._obj.parts.length);
             } else {
                 let objects = this._map.objectsOn(this._obj.position.x, this._obj.position.y);
-                if (objects.length > 1) {
-                    objects.forEach(element => {
-                        let obj = element.object;
-                        this._snake.accept(obj);
-                        this._map.replaceObject(element);
-                    });
-                }
+                objects.forEach(element => {
+                    if (element.object === this._obj.object) {
+                        return;
+                    }
+
+                    let obj = element.object;
+                    this._snake.accept(obj);
+                });
             }
         }
     }

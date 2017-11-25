@@ -7,7 +7,8 @@ class GameFactory2D {
         let foodEngine = new FoodEngine(params.food, params.gameMap);
         foodEngine.update();
 
-        params.gameMap.addObject(params.food);
+        let posionEngine = new FoodEngine(params.poison, params.gameMap);
+        posionEngine.update();
 
         return {
             "camera": new CameraRenderer2D(params.movingSnake),
@@ -15,6 +16,7 @@ class GameFactory2D {
             "snake": new SnakeRenderer(params.movingSnake, params.gameMap),
             "map": new MapRenderer(params.gameMap),
             "food": new FoodRenderer(params.food),
+            "poison": new FoodRenderer(params.poison),
         };
     }
 }
@@ -26,14 +28,16 @@ class GameFactory3D {
         let foodEngine = new FoodEngine(params.food, params.gameMap);
         foodEngine.update();
 
-        params.gameMap.addObject(params.food);
+        let posionEngine = new FoodEngine(params.poison, params.gameMap);
+        posionEngine.update();
 
         return {
             "camera": new CameraRenderer3D(params.movingSnake),
             "player": player,
             "snake": new SnakeRenderer(params.movingSnake, params.gameMap),
             "map": new MapRenderer(params.gameMap),
-            "food": new FoodRenderer(params.food)
+            "food": new FoodRenderer(params.food),
+            "poison": new FoodRenderer(params.poison),
         };
     }
 }

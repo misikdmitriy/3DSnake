@@ -7,7 +7,7 @@ class GameOverError extends Error {
         eventDispatcher.publish("gameOver");
     }
 
-    get loser() {
+    get size() {
         return this._loserSize;
     }
 }

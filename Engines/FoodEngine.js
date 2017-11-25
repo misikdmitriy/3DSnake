@@ -18,6 +18,8 @@ class FoodEngine {
         };
 
         eventDispatcher.subscribe("foodAccepted", this._foodAcceptedListener);
+
+        this._map.addObject(this._food);
     }
 
     update() {
@@ -28,6 +30,8 @@ class FoodEngine {
 
             updated = this._map.objectsOn(this._food.position.x, this._food.position.y).length === 0;
         }
+
+        this._map.replaceObject(this._food);
     }
 
     get food() {

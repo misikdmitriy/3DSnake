@@ -107,7 +107,7 @@ class Snake {
         }
         if (food instanceof SnakeBody || food instanceof SnakeHead ||
             food instanceof PoisonFood) {
-            throw new GameOverError(this.size);            
+            throw new GameOverError(this.size);
         }
     }
 

@@ -47,6 +47,10 @@ class GameController {
         this._timer = setInterval(this._tact, this._speed);
     }
 
+    addRenderer(renderer) {
+        this._renderers.push(renderer);
+    }
+
     dispose() {
         clearInterval(this._timer);
 

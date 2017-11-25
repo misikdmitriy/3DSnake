@@ -58,23 +58,25 @@ class GameMap {
             Helpers.throwIfLess(pos.x, 0);
             Helpers.throwIfLess(pos.y, 0);
 
-            self._map[pos.y][pos.x].push(object);
+            self._map[pos.y][pos.x].push(obj);
         });
     }
 
     removeObject(object) {
         let result = false;
 
-        for (let i = 0; i < this.height; i++) {
-            for (let j = 0; j < this.width; j++) {
-                let index = this._map[i][j].indexOf(object);
+        object.parts.forEach(obj => {
+            for (let i = 0; i < this.height; i++) {
+                for (let j = 0; j < this.width; j++) {
+                    let index = this._map[i][j].indexOf(obj);
 
-                if (index !== -1) {
-                    result = true;
-                    this._map[i][j].splice(index, 1);
+                    if (index !== -1) {
+                        result = true;
+                        this._map[i][j].splice(index, 1);
+                    }
                 }
             }
-        }
+        });
 
         return result;
     }

@@ -124,9 +124,15 @@ describe("GameMap tests", function () {
 
         let objs = map.objects;
 
-        assert(objs.length === 2);
-        assert(objs.indexOf(obj1) !== -1);
-        assert(objs.indexOf(obj2) !== -1);
+        assert(objs.length === 8);
+        assert(objs.indexOf(obj1.parts[0]) !== -1);
+        assert(objs.indexOf(obj1.parts[1]) !== -1);
+        assert(objs.indexOf(obj1.parts[2]) !== -1);
+        assert(objs.indexOf(obj2.parts[0]) !== -1);
+        assert(objs.indexOf(obj2.parts[1]) !== -1);
+        assert(objs.indexOf(obj2.parts[2]) !== -1);
+        assert(objs.indexOf(obj2.parts[3]) !== -1);
+        assert(objs.indexOf(obj2.parts[4]) !== -1);
     });
 
     it("objects should return all map objects 2", function() {
