@@ -12,9 +12,7 @@ class FoodEngine {
         let self = this;
 
         this._foodAcceptedListener = params => {
-            if (params.food === params.food) {
-                self.update();
-            }
+            self.update();
         };
 
         eventDispatcher.subscribe("foodAccepted", this._foodAcceptedListener);

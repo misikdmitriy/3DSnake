@@ -48,6 +48,7 @@ class GameController {
     }
 
     addRenderer(renderer) {
+        renderer.render(this._scene);
         this._renderers.push(renderer);
     }
 

@@ -14,8 +14,8 @@
         let food = new GoodFood();
         let poison = new PoisonFood();
 
-        let movingFood = new MovingObject(food, { x: 6, y: 5 });
-        let movingPosion = new MovingObject(poison, { x: 6, y: 6 });
+        let movingFood = new MovingObject(food, { x: 0, y: 0 });
+        let movingPosion = new MovingObject(poison, { x: 0, y: 0 });
 
         let gameObjects = new GameFactory2D().create({
             movingSnake: movingSnake,
@@ -25,10 +25,10 @@
             realSnake: snake
         });
 
-        let renderers = CONFIG.debug ? [gameObjects.snake, gameObjects.map, gameObjects.food, 
-            gameObjects.poison]
-            : [gameObjects.snake, gameObjects.camera, gameObjects.map, gameObjects.food, 
-                gameObjects.poison];
+        let renderers = CONFIG.debug ? [gameObjects.snake, gameObjects.map, gameObjects.food,
+        gameObjects.poison]
+            : [gameObjects.snake, gameObjects.camera, gameObjects.map, gameObjects.food,
+            gameObjects.poison];
 
         gameObjects.player.subscribe();
 
@@ -43,6 +43,15 @@
         let lightFactory = new LightFactory();
         lightFactory.createLight(gameMap).forEach(light => {
             threeProxy.add(light);
+        });
+
+        let foodFactory = new FoodFactory();
+
+        eventDispatcher.subscribe("foodAccepted", () => {
+            let food = new PoisonFood();
+            let movingFood = new MovingObject(food, { x: 0, y: 0 });
+            foodFactory.createFood(movingFood, gameMap);
+            controller.addRenderer(foodFactory.createRenderer(movingFood));
         });
     }
 
@@ -72,13 +81,13 @@
         }
 
         $("#scores").append('<span id="quit">Back</span>');
-        $("#quit").click(function() {
+        $("#quit").click(function () {
             $("#menu").show();
             $("#scores").hide();
         });
     });
 
-    $("#resetScores").click(function() {
+    $("#resetScores").click(function () {
         scoreRegistrator.removeAll();
     });
 
@@ -89,6 +98,8 @@
             threeProxy.dispose();
 
             $("#menu").show();
+
+            eventDispatcher.drop();
         }
     };
 })();

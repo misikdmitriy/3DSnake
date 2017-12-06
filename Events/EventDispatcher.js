@@ -28,6 +28,10 @@ class EventDispatcher {
             });
         }
     }
+
+    drop() {
+        this._listeners = {};
+    }
 }
 
 let eventDispatcher = new EventDispatcher();
