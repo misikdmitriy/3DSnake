@@ -48,8 +48,7 @@ class SnakeRenderer {
 
         let geometry = new THREE.BoxBufferGeometry(size, size, size);
         let texture = new THREE.TextureLoader().load("textures/snake.jpg");        
-        let material = ThreeHelpers.createMaterial({ 
-            // color: 0x00ff00,
+        let material = ThreeHelpers.createMaterial({
             map: texture
         });
         this._head = new THREE.Mesh(geometry, material);
@@ -66,7 +65,6 @@ class SnakeRenderer {
         let geometry = new THREE.BoxBufferGeometry(size, size, size);
         let texture = new THREE.TextureLoader().load("textures/snake.jpg");                
         let material = ThreeHelpers.createMaterial({ 
-            // color: 0x00ff00,
             map: texture
         });
         let mesh = new THREE.Mesh(geometry, material);
