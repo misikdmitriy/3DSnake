@@ -1,6 +1,6 @@
 // jshint esversion: 6 
 
-class ThreeProxy {
+class ThreeFacade {
     constructor(width, height) {
         this.width = width || window.innerWidth;
         this.height = height || window.innerHeight;

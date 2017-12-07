@@ -1,7 +1,5 @@
 // jshint esversion: 6
 
-class MapCollisionException extends Error { }
-
 class GameMap {
     constructor(width, height) {
         this._width = width || 10;
@@ -83,7 +81,7 @@ class GameMap {
 
     replaceObject(object) {
         let memento = new GameMapMemento();
-        memento.setState(this);
+        memento.saveState(this);
 
         try {
             if (this.removeObject(object)) {
@@ -92,7 +90,7 @@ class GameMap {
             }
         }
         catch (err) {
-            memento.updateState(this);
+            memento.restoreState(this);
         }
 
         return false;

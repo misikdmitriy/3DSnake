@@ -1,7 +1,7 @@
 // jshint esversion: 6
 
 class GameMapMemento {
-    setState(map) {
+    saveState(map) {
         this._map = [];
 
         for (let i = 0; i < map.height; i++) {
@@ -14,11 +14,7 @@ class GameMapMemento {
         }
     }
 
-    getState() {
-        return this._map;
-    }
-
-    updateState(map) {
+    restoreState(map) {
         map._map = this._map;
     }
 }

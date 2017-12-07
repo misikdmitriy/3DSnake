@@ -34,4 +34,5 @@ class EventDispatcher {
     }
 }
 
+// Global application event bus
 let eventDispatcher = new EventDispatcher();

@@ -3,7 +3,7 @@
 (function () {
     "use strict";
 
-    let threeProxy = new ThreeProxy(640, 480);
+    let threeFacade = new ThreeFacade(640, 480);
 
     function startGame() {
         let gameMap = new GameMap(15, 15);
@@ -33,16 +33,16 @@
         gameObjects.player.subscribe();
 
         let controller = new GameController([gameObjects.player],
-            renderers, threeProxy, CONFIG.speed);
+            renderers, threeFacade, CONFIG.speed);
 
         if (CONFIG.debug) {
-            threeProxy.addTrackball();
-            gameObjects.camera.render(threeProxy);
+            threeFacade.addTrackball();
+            gameObjects.camera.render(threeFacade);
         }
 
         let lightFactory = new LightFactory();
         lightFactory.createLight(gameMap).forEach(light => {
-            threeProxy.add(light);
+            threeFacade.add(light);
         });
 
         let foodFactory = new FoodFactory();
@@ -95,7 +95,7 @@
         if (error instanceof GameOverError || error instanceof CollisionException) {
             scoreRegistrator.register(error.size);
 
-            threeProxy.dispose();
+            threeFacade.dispose();
 
             $("#menu").show();
 
