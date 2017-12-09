@@ -5,7 +5,7 @@
 
     let threeFacade = new ThreeFacade(640, 480);
 
-    function startGame() {
+    function startGame(isThreeD) {
         let gameMap = new GameMap(15, 15);
 
         let snake = new Snake(5);
@@ -17,13 +17,16 @@
         let movingFood = new MovingObject(food, { x: 0, y: 0 });
         let movingPosion = new MovingObject(poison, { x: 0, y: 0 });
 
-        let gameObjects = new GameFactory2D().create({
+        let params = {
             movingSnake: movingSnake,
             gameMap: gameMap,
             food: movingFood,
             poison: movingPosion,
             realSnake: snake
-        });
+        };
+
+        let gameObjects = isThreeD ? new GameFactory3D().create(params)
+            : new GameFactory2D().create(params);
 
         let renderers = CONFIG.debug ? [gameObjects.snake, gameObjects.map, gameObjects.food,
         gameObjects.poison]
@@ -57,8 +60,10 @@
 
     let scoreRegistrator = new ScoreRegistrator();
 
+    let threeDMode = true;
+
     $("#startGame").click(function () {
-        startGame();
+        startGame(threeDMode);
 
         $("#menu").hide();
     });
@@ -89,6 +94,16 @@
 
     $("#resetScores").click(function () {
         scoreRegistrator.removeAll();
+    });
+
+    $("#mode").click(function() {
+        threeDMode = !threeDMode;
+
+        if (threeDMode) {
+            $("#mode").text("3D");
+        } else {
+            $("#mode").text("2D");
+        }
     });
 
     window.onerror = function (msg, url, line, col, error) {

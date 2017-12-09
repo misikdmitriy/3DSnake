@@ -50,5 +50,6 @@ class CameraRenderer2D {
 
         this._camera.position.set(head.position.x * mapSize, head.position.y * mapSize, 45);
         this._camera.up = new THREE.Vector3(0, 0, 1);
+        this._camera.rotation.set(0, 0, 0);
     }
 }
