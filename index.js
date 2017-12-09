@@ -9,13 +9,22 @@
         let gameMap = new GameMap(15, 15);
 
         let snake = new Snake(5);
-        let movingSnake = new PartsMovingObject(snake, { x: 4, y: 5 }, Direction.LEFT);
+        let movingSnake = new PartsMovingObject(snake, {
+            x: 4,
+            y: 5
+        }, Direction.LEFT);
 
         let food = new GoodFood();
         let poison = new PoisonFood();
 
-        let movingFood = new MovingObject(food, { x: 0, y: 0 });
-        let movingPosion = new MovingObject(poison, { x: 0, y: 0 });
+        let movingFood = new MovingObject(food, {
+            x: 0,
+            y: 0
+        });
+        let movingPosion = new MovingObject(poison, {
+            x: 0,
+            y: 0
+        });
 
         let params = {
             movingSnake: movingSnake,
@@ -25,13 +34,15 @@
             realSnake: snake
         };
 
-        let gameObjects = isThreeD ? new GameFactory3D().create(params)
-            : new GameFactory2D().create(params);
+        let gameObjects = isThreeD ? new GameFactory3D().create(params) :
+            new GameFactory2D().create(params);
 
         let renderers = CONFIG.debug ? [gameObjects.snake, gameObjects.map, gameObjects.food,
-        gameObjects.poison]
-            : [gameObjects.snake, gameObjects.camera, gameObjects.map, gameObjects.food,
-            gameObjects.poison];
+                gameObjects.poison
+            ] :
+            [gameObjects.snake, gameObjects.camera, gameObjects.map, gameObjects.food,
+                gameObjects.poison
+            ];
 
         gameObjects.player.subscribe();
 
@@ -52,10 +63,20 @@
 
         eventDispatcher.subscribe("foodAccepted", () => {
             let food = new PoisonFood();
-            let movingFood = new MovingObject(food, { x: 0, y: 0 });
+            let movingFood = new MovingObject(food, {
+                x: 0,
+                y: 0
+            });
             foodFactory.createFood(movingFood, gameMap);
             controller.addRenderer(foodFactory.createRenderer(movingFood));
         });
+
+        eventDispatcher.subscribe("foodAccepted", (params) => {
+            $(".snake-size").text(params.sender.size);
+        });
+
+        $(".snake-size").show();
+        $(".snake-size").text(snake.size);
     }
 
     let scoreRegistrator = new ScoreRegistrator();
@@ -80,8 +101,7 @@
             for (let i = 0; i < scores.length; i++) {
                 $("#scores").append('<span class="score">' + (i + 1) + '. ' + scores[i] + '</span>');
             }
-        }
-        else {
+        } else {
             $("#scores").append('<span class="score">No scores</span>');
         }
 
@@ -96,7 +116,7 @@
         scoreRegistrator.removeAll();
     });
 
-    $("#mode").click(function() {
+    $("#mode").click(function () {
         threeDMode = !threeDMode;
 
         if (threeDMode) {
@@ -106,14 +126,19 @@
         }
     });
 
+    $("#help").click(function() {
+        window.location += "help.pdf";
+    });
+
     window.onerror = function (msg, url, line, col, error) {
-        if (error instanceof GameOverError || error instanceof CollisionException) {
+        if (error instanceof GameOverError) {
             scoreRegistrator.register(error.size);
 
             threeFacade.dispose();
 
             $("#menu").show();
-
+            $(".snake-size").hide();
+            
             eventDispatcher.drop();
         }
     };
