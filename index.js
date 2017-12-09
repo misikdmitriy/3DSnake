@@ -78,7 +78,7 @@
 
         if (scores && scores.length) {
             for (let i = 0; i < scores.length; i++) {
-                $("#scores").append('<span class="score">' + i + '. ' + scores[i] + '</span>');
+                $("#scores").append('<span class="score">' + (i + 1) + '. ' + scores[i] + '</span>');
             }
         }
         else {
